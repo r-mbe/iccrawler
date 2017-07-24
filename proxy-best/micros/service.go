@@ -5,8 +5,8 @@ import (
 	"errors"
 	"fmt"
 
-	"techtoolkit.ickey.cn/proxy-best/daxiang"
-	"techtoolkit.ickey.cn/proxy-best/proxy"
+	"github.com/stanxii/iccrawler/proxy-best/daxiang"
+	"github.com/stanxii/iccrawler/proxy-best/proxy"
 )
 
 //Service picker the best proxy ip from proxypool

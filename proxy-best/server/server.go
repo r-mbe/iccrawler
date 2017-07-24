@@ -9,8 +9,10 @@ import (
 	"github.com/getlantern/http-proxy/listeners"
 	"github.com/getlantern/tlsdefaults"
 
-	"techtoolkit.ickey.cn/proxy-best/config"
-	"techtoolkit.ickey.cn/proxy-best/proxy"
+	mainlog "github.com/cihub/seelog"
+
+	"github.com/stanxii/iccrawler/proxy-best/config"
+	"github.com/stanxii/iccrawler/proxy-best/proxy"
 )
 
 var (
@@ -24,6 +26,7 @@ type listenerGenerator func(net.Listener) net.Listener
 type Server struct {
 	// Allow is a function that determines whether or not to allow connections
 	// from the giNewConnBagven IP address. If unspecified, all connections are allowed.
+	Allow              func(string) bool
 	httpServer         http.Server
 	listenerGenerators []listenerGenerator
 	p                  *proxy.Proxy
@@ -64,7 +67,7 @@ func NewServer(handler http.Handler) *Server {
 		},
 	}
 
-	server.Seelog = Seelog
+	server.Seelog = &Seelog
 
 	return server
 }

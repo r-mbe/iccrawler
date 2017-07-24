@@ -5,7 +5,7 @@ import (
 	"log"
 	"testing"
 
-	"techtoolkit.ickey.cn/proxy-best/daxiang"
+	"github.com/stanxii/iccrawler/proxy-best/daxiang"
 )
 
 func TestGetBestIP(t *testing.T) {

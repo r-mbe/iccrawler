@@ -8,7 +8,7 @@ import (
 
 	"github.com/ethereum/go-ethereum/log"
 
-	"techtoolkit.ickey.cn/proxy-best/config"
+	"github.com/stanxii/iccrawler/proxy-best/config"
 )
 
 // Proxy is an HTTP proxy server.
