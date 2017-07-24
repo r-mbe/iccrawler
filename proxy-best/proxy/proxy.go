@@ -2,11 +2,10 @@ package proxy
 
 import (
 	"crypto/tls"
+	"log"
 	"net/http"
 	"net/url"
 	"time"
-
-	"github.com/ethereum/go-ethereum/log"
 
 	"github.com/stanxii/iccrawler/proxy-best/config"
 )
@@ -48,7 +47,7 @@ func (p *Proxy) proxyGet(url string) (string, error) {
 	_, err := p.httpClient.Get("http://example.com") // do request through proxy
 	// defer resp.Body.Close()
 	if err != nil {
-		log.Error("http proxy get error: %v", err)
+		log.Printf("http proxy get error: %v", err)
 	}
 
 	return "ok", nil
