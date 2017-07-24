@@ -10,7 +10,7 @@ import (
 
 	"github.com/go-kit/kit/log"
 
-	"techtoolkit.ickey.cn/proxy-best/micros"
+	"github.com/stanxii/iccrawler/proxy-best/micros"
 )
 
 func main() {
