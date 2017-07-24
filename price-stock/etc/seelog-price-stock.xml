@@ -1,0 +1,10 @@
+<seelog>  
+    <outputs formatid="seelog-price-stock">  
+        <buffered size="20" flushperiod="20">  
+            <rollingfile type="date" filename="/var/log/seelog-price-stock.log" datepattern="2016.01.02" maxrolls="5"/>  
+        </buffered>  
+    </outputs>  
+    <formats>  
+        <format id="seelog-price-stock" format="%Msg%n"/>  
+    </formats>  
+</seelog> 

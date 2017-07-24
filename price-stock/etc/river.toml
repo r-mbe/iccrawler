@@ -1,0 +1,129 @@
+# MySQL address, user and password
+# user must have replication privilege in MySQL.
+
+## for production  for only replication  ################################################
+my_addr = "mysqldb.product.rw.01.ickey.cn:3306"
+my_user = "product_repl"
+my_pass = "37rLWxKzDadxZNQF"
+es_addr = "http://es.search.ickey.cn:9200"
+es_indexs =  ["ickey", "chip1stop", "digikey", "future", "wpi", "master", "microchip", "ps", "vicor", "avnet", "rs", "element14", "element14cn", "aipco", "rochester"]
+data_dir = "./var"
+stat_addr = "10.8.51.96:12800"
+server_id = 1003
+flavor = "mysql"
+
+# mysql or mariadb
+# mysqldump execution path
+# if not set or empty, ignore mysqldump.
+#mysqldump = ""
+
+
+
+## For Test eviroment. ############################################
+
+#my_addr = "10.8.11.225:3306"
+#my_user = "repl"
+#my_pass = "mysql"
+#es_addr = "http://10.8.15.168:9200"
+#es_indexs =  ["ickey", "chip1stop", "digikey", "future", "wpi", "master", "microchip", "ps", "vicor", "avnet", "rs", "element14", "element14cn", "aipco", "rochester"]
+#data_dir = "./var"
+#stat_addr = "10.8.15.9:12800"
+#server_id = 1003
+#flavor = "mysql"
+
+
+# mysql or mariadb
+# mysqldump execution path
+# if not set or empty, ignore mysqldump.
+#mysqldump = "mysqldump"
+
+# MySQL data source
+[[source]]
+schema = "db_product"
+
+# Only below tables will be synced into Elasticsearch.
+# "test_river_[0-9]{4}" is a wildcard table format, you can use it if you have many sub tables, like table_0000 - table_1023
+# I don't think it is necessary to sync all tables in a database.
+tables = ["t_product", "t_pro_sell_stock", "t_pro_sell"]
+
+# Below is for special rule mapping
+[[rule]]
+schema = "db_product"
+table = "t_pro_sell_stock"
+index = "stock"
+type = "product"
+# only MySQL field in filter will be synced
+filter=["sku", "stock_num", "frozen_num", "virtual_num", "stock_type"]
+    # title is MySQL test_river field name, es_title is the customized name in Elasticsearch
+    [rule.field]
+    # This will map column title to elastic search my_title
+    sku="sku"
+    # This will map column tags to elastic search my_tags and use array type
+    stock_num="stock_num"
+    # This will map column keywords to elastic search keywords and use array type
+    frozen_num="frozen_num"
+    virtual_num="virtual_num"
+    stock_type="stock_type"
+
+# Below is for special rule mapping
+[[rule]]
+schema = "db_product"
+table = "t_product"
+index = "product"
+type = "product"
+
+# only MySQL field in filter will be synced
+filter=["id","pro_sno","maf_id","pro_name","cate_id","pro_group","img_url","pro_url","data_sheet","remark","status","op_admin_id","op_admin_name","created_time","last_update_time","is_rohs","supplier_category"]
+    # title is MySQL test_river field name, es_title is the customized name in Elasticsearch
+    [rule.field]
+    # This will map column title to elastic search my_title
+    id="pro_id"
+    # This will map column tags to elastic search my_tags and use array type
+    pro_sno="pro_sno"
+    maf_id="maf_id"
+    pro_name="pro_name"
+    cate_id="cate_id"
+    pro_group="pro_group"
+    img_url="img_url"
+    pro_url="pro_url"
+    data_sheet="data_sheet"
+    remark="remark"
+    status="status"
+    op_admin_id="op_admin_id"
+    op_admin_name="op_admin_name"
+    created_time="created_time"
+    last_update_time="last_update_time"
+    is_rohs="is_rohs"
+
+
+    ## notice online db new this field but binlog is old had no this field! but test db has!!!!!!
+    supplier_category="supplier_category"
+
+[[rule]]
+schema = "db_product"
+table = "t_pro_sell"
+index = "t_pro_sell"
+type = "product"
+
+# only MySQL field in filter will be ickey status to 0 for upate es index offline status.
+filter=["id","status"]
+    # title is MySQL test_river field name, es_title is the customized name in Elasticsearch
+    [rule.field]
+    # This will map column title to elastic search my_title
+    id="pid"
+    # This will map column tags to elastic search my_tags and use array type
+    status="status"
+    
+# wildcard table rule, the wildcard table must be in source tables 
+#[[rule]]
+#schema = "test"
+#table = "test_river_[0-9]{4}"
+#index = "river"
+#type = "river"
+
+    # title is MySQL test_river field name, es_title is the customized name in Elasticsearch
+#    [[rule.fields]]
+#    mysql = "title"
+#    elastic = "es_title"
+
+

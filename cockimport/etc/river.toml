@@ -1,0 +1,105 @@
+# MySQL address, user and password
+# user must have replication privilege in MySQL.
+
+my_addr = "mysqldb.product.rw.01.ickey.cn:3306"
+my_user = "product_repl"
+my_pass = "37rLWxKzDadxZNQF"
+data_dir = "./var"
+stat_addr = "10.8.51.96:12800"
+server_id = 1005
+flavor = "mysql"
+my_charset = "utf8"
+seelog = "etc/seelog-price-stock.xml"
+
+#cockroachdb params
+cock_dbname = "db_product"
+cock_addr = "10.8.15.167:26257"
+cock_user = "stan"
+cock_pass = "888888"
+
+# Elasticsearch params
+es_addr = "http://es.search.ickey.cn:9200"
+es_indexs =  ["ickey", "chip1stop", "digikey", "future", "wpi", "master", "microchip", "ps", "vicor", "avnet", "rs", "element14", "element14cn", "aipco", "rochester"]
+
+es_user = ""
+es_pass = ""
+
+# Path to store data, like master.info, if not set or empty,
+
+# we must use this to support breakpoint resume syncing.
+# TODO: support other storage, like etcd.
+# Inner Http status address
+# mysqldump execution path
+# if not set or empty, ignore mysqldump.
+#mysqldump = ""
+
+# minimal items to be inserted in one bulk
+bulk_size = 128
+
+# force flush the pending requests if we don't have enough items >= bulk_size
+flush_bulk_time = "200ms"
+
+# MySQL data source
+[[source]]
+schema = "db_product"
+
+# Only below tables will be synced into Elasticsearch.
+# "t_[0-9]{4}" is a wildcard table format, you can use it if you have many sub tables, like table_0000 - table_1023
+# I don't think it is necessary to sync all tables in a database.
+tables = ["t_pro_sell_stock","t_pro_sell_price"]
+
+# Below is for special rule mapping
+
+# Very simple example
+#
+# desc t;
+# +-------+--------------+------+-----+---------+-------+
+# | Field | Type         | Null | Key | Default | Extra |
+# +-------+--------------+------+-----+---------+-------+
+# | id    | int(11)      | NO   | PRI | NULL    |       |
+# | name  | varchar(256) | YES  |     | NULL    |       |
+# +-------+--------------+------+-----+---------+-------+
+#
+# The table `t` will be synced to ES index `test` and type `t`.
+[[rule]]
+schema = "db_product"
+table = "db_product"
+index = "t_pro_sell_stock"
+type = "t_pro_sell_stock"
+# only MySQL field in filter will be synced
+filter=["sku", "stock_num", "frozen_num", "virtual_num"]
+id = "sku"
+    # title is MySQL test_river field name, es_title is the customized name in Elasticsearch
+    [rule.field]
+    # This will map column title to elastic search my_title
+    # Map column `id` to ES field `es_id`
+    id="mysql_id"
+    # This will map column tags to elastic search my_tags and use array type
+    stock_num="stock_num"
+    # This will map column keywords to elastic search keywords and use array type
+    frozen_num="frozen_num"
+    virtual_num="virtual_num"
+    stock_type="stock_type"
+    last_update_time="last_update_time"
+
+# Wildcard table rule, the wildcard table must be in source tables
+# All tables which match the wildcard format will be synced to ES index `test` and type `t`.
+# In this example, all tables must have same schema with above table `t`;
+[[rule]]
+schema = "db_product"
+table = "t_pro_sell_price"
+index = "db_product"
+type = "t_pro_sell_price"
+# only MySQL field in filter will be synced
+filter=["sku", "stock_num", "frozen_num", "virtual_num", "stock_type", "last_update_time"]
+    # title is MySQL test_river field name, es_title is the customized name in Elasticsearch
+    [rule.field]
+    # This will map column title to elastic search my_title
+    # Map column `id` to ES field `es_id`
+    id="mysql_id"
+    # This will map column tags to elastic search my_tags and use array type
+    sku="sku"
+    # This will map column keywords to elastic search keywords and use array type
+    price1="price1"
+    number1="number1"
+    last_update_time="last_update_time"

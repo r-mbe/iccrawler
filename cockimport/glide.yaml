@@ -1,0 +1,38 @@
+package: github.com/siddontang/go-mysql-elasticsearch
+import:
+- package: github.com/codahale/hdrhistogram
+  version: 3a0bb77429bd3a61596f5e8a3172445844342120
+- package: github.com/nsqio/nsq
+  version: 6c64ce0d958a844106715cfaf52d7bd8ceef4af6
+- package: github.com/nsqio/go-nsq
+  version: 973bf9a2952ff7e38071ae8392b73e4418503059
+- package: github.com/jinzhu/gorm
+  version: 2a1463811ee1dc85d168fd639a2d4251d030e6e5
+- package: github.com/BurntSushi/toml
+  version: 056c9bc7be7190eaa7715723883caffa5f8fa3e4
+- package: github.com/cihub/seelog
+  version: d2c6e5aa9fbfdd1c624e140287063c7730654115
+- package: github.com/juju/errors
+  version: 6f54ff6318409d31ff16261533ce2c8381a4fd5d
+- package: github.com/satori/go.uuid
+  version: ^1.1.0
+- package: github.com/lib/pq
+  version: 8837942c3e09574accbc5f150e2c5e057189cace
+- package: github.com/siddontang/go-mysql
+  version: ead11cac47bd127a8c667efa07f171a9143d8a25
+  subpackages:
+  - canal
+  - client
+  - dump
+  - mysql
+  - packet
+  - replication
+  - schema
+- package: github.com/siddontang/go
+  version: 354e14e6c093c661abb29fd28403b3c19cff5514
+  subpackages:
+  - hack
+  - ioutil2
+  - sync2
+- package: gopkg.in/check.v1
+  version: 11d3bc7aa68e238947792f30573146a3231fc0f1

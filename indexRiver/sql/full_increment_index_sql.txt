@@ -1,0 +1,92 @@
+#索引里面全部添加md5值
+#what data need index? 
+select * from db_www.t_search_supplier where datatype = 1
+
+///////////////////////////////full index
+
+//ickey
+select t1.id pid,pro_sno as p,pro_sup_sno,pro_id,date_code,lead_time_cn,lead_time_hk,spq,package, t1.status,  pro_name,supplier_id,if(pro_maf='',maf_name,pro_maf) as pro_maf,moq,currency_id,base_buy_amounts,buy_price,base_price,pro_num,img_url,bus_type, pro_desc, t3.sku as sku, unix_timestamp() as chrono,md5(trim(pro_sno)) as pro_sno_md5,md5(trim(pro_sup_sno)) as pro_sup_sno_md5,md5(trim(if(pro_maf='',maf_name,pro_maf))) as pro_maf_md5 from t_pro_sell t1 ,t_maf t2,  t_sku t3 where t1.maf_id=t2.id AND t1.id = t3.pro_sell_id and t1.pro_sup_sno!='' and bus_type in (101,102,103)  and t1.status = 1
+
+//chip1stop
+select t1.id pid,pro_sno as p,pro_sup_sno,pro_id,date_code,lead_time_cn,lead_time_hk,spq,package, t1.status,  pro_name,supplier_id,t2.maf_name as pro_maf,moq,currency_id,base_buy_amounts,buy_price,base_price,pro_num,img_url,bus_type, pro_desc, t3.sku as sku, unix_timestamp() as chrono,md5(trim(pro_sno)) as pro_sno_md5,md5(trim(pro_sup_sno)) as pro_sup_sno_md5,md5(trim(if(pro_maf='',maf_name,pro_maf))) as pro_maf_md5 from t_pro_sell t1,t_maf t2,  t_sku t3  where t1.maf_id=t2.id AND t1.id = t3.pro_sell_id and t1.pro_sup_sno != '' and t1.bus_type=2 and t1.status=1 and t1.supplier_id=1
+
+//digikey
+select t1.id pid,pro_sno as p,pro_sup_sno,pro_id,date_code,lead_time_cn,lead_time_hk,spq,package, t1.status,  pro_name,supplier_id,t2.maf_name as pro_maf,moq,currency_id,base_buy_amounts,buy_price,base_price,pro_num,img_url,bus_type, pro_desc, t3.sku as sku, unix_timestamp() as chrono,md5(trim(pro_sno)) as pro_sno_md5,md5(trim(pro_sup_sno)) as pro_sup_sno_md5,md5(trim(if(pro_maf='',maf_name,pro_maf))) as pro_maf_md5 from t_pro_sell t1,t_maf t2,  t_sku t3  where t1.maf_id=t2.id AND t1.id = t3.pro_sell_id and t1.pro_sup_sno != '' and t1.bus_type=2 and t1.status=1 and t1.supplier_id=2
+
+
+//future
+select t1.id pid,pro_sno as p,pro_sup_sno,pro_id,date_code,lead_time_cn,lead_time_hk,spq,package, t1.status, pro_name,supplier_id,t2.maf_name as pro_maf,moq,currency_id,base_buy_amounts,buy_price,base_price,pro_num,img_url,bus_type, pro_desc, t3.sku as sku, unix_timestamp() as chrono,md5(trim(pro_sno)) as pro_sno_md5,md5(trim(pro_sup_sno)) as pro_sup_sno_md5,md5(trim(if(pro_maf='',maf_name,pro_maf))) as pro_maf_md5 from t_pro_sell t1,t_maf t2,  t_sku t3  where t1.maf_id=t2.id AND t1.id = t3.pro_sell_id and t1.pro_sup_sno != '' and t1.bus_type=2 and t1.status=1 and t1.supplier_id=3
+
+//wpi
+select t1.id pid,pro_sno as p,pro_sup_sno,pro_id,date_code,lead_time_cn,lead_time_hk,spq,package, t1.status, pro_name,supplier_id,t2.maf_name as pro_maf,moq,currency_id,base_buy_amounts,buy_price,base_price,pro_num,img_url,bus_type, pro_desc, t3.sku as sku, unix_timestamp() as chrono,md5(trim(pro_sno)) as pro_sno_md5,md5(trim(pro_sup_sno)) as pro_sup_sno_md5,md5(trim(if(pro_maf='',maf_name,pro_maf))) as pro_maf_md5 from t_pro_sell t1,t_maf t2,  t_sku t3  where t1.maf_id=t2.id AND t1.id = t3.pro_sell_id and t1.pro_sup_sno != '' and t1.bus_type=2 and t1.status=1 and t1.supplier_id=4
+
+//master
+select t1.id pid,pro_sno as p,pro_sup_sno,pro_id,date_code,lead_time_cn,lead_time_hk,spq,package, t1.status, pro_name,supplier_id,t2.maf_name as pro_maf,moq,currency_id,base_buy_amounts,buy_price,base_price,pro_num,img_url,bus_type, pro_desc, t3.sku as sku, unix_timestamp() as chrono,md5(trim(pro_sno)) as pro_sno_md5,md5(trim(pro_sup_sno)) as pro_sup_sno_md5,md5(trim(if(pro_maf='',maf_name,pro_maf))) as pro_maf_md5 from t_pro_sell t1,t_maf t2,  t_sku t3  where t1.maf_id=t2.id AND t1.id = t3.pro_sell_id and t1.pro_sup_sno != '' and t1.bus_type=2 and t1.status=1 and t1.supplier_id=7
+
+//microchip
+select t1.id pid,pro_sno as p,pro_sup_sno,pro_id,date_code,lead_time_cn,lead_time_hk,spq,package, t1.status, pro_name,supplier_id,t2.maf_name as pro_maf,moq,currency_id,base_buy_amounts,buy_price,base_price,pro_num,img_url,bus_type, pro_desc, t3.sku as sku, unix_timestamp() as chrono,md5(trim(pro_sno)) as pro_sno_md5,md5(trim(pro_sup_sno)) as pro_sup_sno_md5,md5(trim(if(pro_maf='',maf_name,pro_maf))) as pro_maf_md5 from t_pro_sell t1,t_maf t2,  t_sku t3  where t1.maf_id=t2.id AND t1.id = t3.pro_sell_id and t1.pro_sup_sno != '' and t1.bus_type=2 and t1.status=1 and t1.supplier_id=10
+
+//ps
+select t1.id pid,pro_sno as p,pro_sup_sno,pro_id,date_code,lead_time_cn,lead_time_hk,spq,package, t1.status, pro_name,supplier_id,t2.maf_name as pro_maf,moq,currency_id,base_buy_amounts,buy_price,base_price,pro_num,img_url,bus_type, pro_desc, t3.sku as sku, unix_timestamp() as chrono,md5(trim(pro_sno)) as pro_sno_md5,md5(trim(pro_sup_sno)) as pro_sup_sno_md5,md5(trim(if(pro_maf='',maf_name,pro_maf))) as pro_maf_md5 from t_pro_sell t1,t_maf t2,  t_sku t3  where t1.maf_id=t2.id AND t1.id = t3.pro_sell_id and t1.pro_sup_sno != '' and t1.bus_type=2 and t1.status=1 and t1.supplier_id=11
+
+//vicor
+select t1.id pid,pro_sno as p,pro_sup_sno,pro_id,date_code,lead_time_cn,lead_time_hk,spq,package, t1.status, pro_name,supplier_id,t2.maf_name as pro_maf,moq,currency_id,base_buy_amounts,buy_price,base_price,pro_num,img_url,bus_type, pro_desc, t3.sku as sku, unix_timestamp() as chrono,md5(trim(pro_sno)) as pro_sno_md5,md5(trim(pro_sup_sno)) as pro_sup_sno_md5,md5(trim(if(pro_maf='',maf_name,pro_maf))) as pro_maf_md5 from t_pro_sell t1,t_maf t2,  t_sku t3  where t1.maf_id=t2.id AND t1.id = t3.pro_sell_id and t1.pro_sup_sno != '' and t1.bus_type=2 and t1.status=1 and t1.supplier_id=13
+
+//avnet
+select t1.id pid,pro_sno as p,pro_sup_sno,pro_id,date_code,lead_time_cn,lead_time_hk,spq,package, t1.status, pro_name,supplier_id,t2.maf_name as pro_maf,moq,currency_id,base_buy_amounts,buy_price,base_price,pro_num,img_url,bus_type, pro_desc, t3.sku as sku, unix_timestamp() as chrono,md5(trim(pro_sno)) as pro_sno_md5,md5(trim(pro_sup_sno)) as pro_sup_sno_md5,md5(trim(if(pro_maf='',maf_name,pro_maf))) as pro_maf_md5 from t_pro_sell t1,t_maf t2,  t_sku t3  where t1.maf_id=t2.id AND t1.id = t3.pro_sell_id and t1.pro_sup_sno != '' and t1.bus_type=2 and t1.status=1 and t1.supplier_id=14
+
+//rs
+select t1.id pid,pro_sno as p,pro_sup_sno,pro_id,date_code,lead_time_cn,lead_time_hk,spq,package, t1.status, pro_name,supplier_id,t2.maf_name as pro_maf,moq,currency_id,base_buy_amounts,buy_price,base_price,pro_num,img_url,bus_type, pro_desc, t3.sku as sku, unix_timestamp() as chrono,md5(trim(pro_sno)) as pro_sno_md5,md5(trim(pro_sup_sno)) as pro_sup_sno_md5,md5(trim(if(pro_maf='',maf_name,pro_maf))) as pro_maf_md5 from t_pro_sell t1,t_maf t2,  t_sku t3  where t1.maf_id=t2.id AND t1.id = t3.pro_sell_id and t1.pro_sup_sno != '' and t1.bus_type=2 and t1.status=1 and t1.supplier_id=22
+
+//element14
+select t1.id pid,pro_sno as p,pro_sup_sno,pro_id,date_code,lead_time_cn,lead_time_hk,spq,package, t1.status, pro_name,supplier_id,t2.maf_name as pro_maf,moq,currency_id,base_buy_amounts,buy_price,base_price,pro_num,img_url,bus_type, pro_desc, t3.sku as sku, unix_timestamp() as chrono,md5(trim(pro_sno)) as pro_sno_md5,md5(trim(pro_sup_sno)) as pro_sup_sno_md5,md5(trim(if(pro_maf='',maf_name,pro_maf))) as pro_maf_md5 from t_pro_sell t1,t_maf t2,  t_sku t3  where t1.maf_id=t2.id AND t1.id = t3.pro_sell_id and t1.pro_sup_sno != '' and t1.bus_type=2 and t1.status=1 and t1.supplier_id=26 
+
+//element14cn
+select t1.id pid,pro_sno as p,pro_sup_sno,pro_id,date_code,lead_time_cn,lead_time_hk,spq,package, t1.status, pro_name,supplier_id,t2.maf_name as pro_maf,moq,currency_id,base_buy_amounts,buy_price,base_price,pro_num,img_url,bus_type, pro_desc, t3.sku as sku, unix_timestamp() as chrono,md5(trim(pro_sno)) as pro_sno_md5,md5(trim(pro_sup_sno)) as pro_sup_sno_md5,md5(trim(if(pro_maf='',maf_name,pro_maf))) as pro_maf_md5 from t_pro_sell t1,t_maf t2,  t_sku t3  where t1.maf_id=t2.id AND t1.id = t3.pro_sell_id and t1.pro_sup_sno != '' and t1.bus_type=2 and t1.status=1 and t1.supplier_id=34
+
+//aipco
+select t1.id pid,pro_sno as p,pro_sup_sno,pro_id,date_code,lead_time_cn,lead_time_hk,spq,package, t1.status, pro_name,supplier_id,t2.maf_name as pro_maf,moq,currency_id,base_buy_amounts,buy_price,base_price,pro_num,img_url,bus_type, pro_desc, t3.sku as sku, unix_timestamp() as chrono,md5(trim(pro_sno)) as pro_sno_md5,md5(trim(pro_sup_sno)) as pro_sup_sno_md5,md5(trim(if(pro_maf='',maf_name,pro_maf))) as pro_maf_md5 from t_pro_sell t1,t_maf t2,  t_sku t3  where t1.maf_id=t2.id AND t1.id = t3.pro_sell_id and t1.pro_sup_sno != '' and t1.bus_type=2 and t1.status=1 and t1.supplier_id=27
+
+//////////////////////////////////////////////////////////////////////////////////////////////
+////incrindex/////////
+//increment ickey 
+select t1.id pid,pro_sno as p,pro_sup_sno,pro_id,date_code,lead_time_cn,lead_time_hk,spq,package, t1.status,  pro_name,supplier_id,if(pro_maf='',maf_name,pro_maf) as pro_maf,moq,currency_id,base_buy_amounts,buy_price,base_price,pro_num,img_url,bus_type, pro_desc, t3.sku as sku, unix_timestamp() as chrono,md5(trim(pro_sno)) as pro_sno_md5,md5(trim(pro_sup_sno)) as pro_sup_sno_md5,md5(trim(if(pro_maf='',maf_name,pro_maf))) as pro_maf_md5 from t_pro_sell t1 ,t_maf t2,  t_sku t3 where t1.maf_id=t2.id AND t1.id = t3.pro_sell_id and t1.pro_sup_sno!='' and bus_type in (101,102,103)  and t1.status = 1 and t1.last_update_time >= %v
+
+//increment chip1stop
+select t1.id pid,pro_sno as p,pro_sup_sno,pro_id,date_code,lead_time_cn,lead_time_hk,spq,package, t1.status, pro_name,supplier_id,t2.maf_name as pro_maf,moq,currency_id,base_buy_amounts,buy_price,base_price,pro_num,img_url,bus_type, pro_desc, t3.sku as sku, unix_timestamp() as chrono,md5(trim(pro_sno)) as pro_sno_md5,md5(trim(pro_sup_sno)) as pro_sup_sno_md5,md5(trim(if(pro_maf='',maf_name,pro_maf))) as pro_maf_md5 from t_pro_sell t1,t_maf t2,  t_sku t3 WHERE  t1.maf_id = t2.id AND t1.id = t3.pro_sell_id AND t1.pro_sup_sno != '' AND t1.bus_type=2  AND t1.new_data_hash != t1.source_data_hash and t1.supplier_id = 1
+
+//increment digikey
+select t1.id pid,pro_sno as p,pro_sup_sno,pro_id,date_code,lead_time_cn,lead_time_hk,spq,package, t1.status, pro_name,supplier_id,t2.maf_name as pro_maf,moq,currency_id,base_buy_amounts,buy_price,base_price,pro_num,img_url,bus_type, pro_desc, t3.sku as sku, unix_timestamp() as chrono,md5(trim(pro_sno)) as pro_sno_md5,md5(trim(pro_sup_sno)) as pro_sup_sno_md5,md5(trim(if(pro_maf='',maf_name,pro_maf))) as pro_maf_md5 from t_pro_sell t1,t_maf t2,  t_sku t3 WHERE  t1.maf_id = t2.id AND t1.id = t3.pro_sell_id AND t1.pro_sup_sno != '' AND t1.bus_type=2  AND t1.new_data_hash != t1.source_data_hash and t1.supplier_id = 2
+
+//increment future
+select t1.id pid,pro_sno as p,pro_sup_sno,pro_id,date_code,lead_time_cn,lead_time_hk,spq,package, t1.status, pro_name,supplier_id,t2.maf_name as pro_maf,moq,currency_id,base_buy_amounts,buy_price,base_price,pro_num,img_url,bus_type, pro_desc, t3.sku as sku, unix_timestamp() as chrono,md5(trim(pro_sno)) as pro_sno_md5,md5(trim(pro_sup_sno)) as pro_sup_sno_md5,md5(trim(if(pro_maf='',maf_name,pro_maf))) as pro_maf_md5 from t_pro_sell t1,t_maf t2,  t_sku t3 WHERE  t1.maf_id = t2.id AND t1.id = t3.pro_sell_id AND t1.pro_sup_sno != '' AND t1.bus_type=2  AND t1.new_data_hash != t1.source_data_hash and t1.supplier_id = 3
+
+//increment wpi
+select t1.id pid,pro_sno as p,pro_sup_sno,pro_id,date_code,lead_time_cn,lead_time_hk,spq,package, t1.status, pro_name,supplier_id,t2.maf_name as pro_maf,moq,currency_id,base_buy_amounts,buy_price,base_price,pro_num,img_url,bus_type, pro_desc, t3.sku as sku, unix_timestamp() as chrono,md5(trim(pro_sno)) as pro_sno_md5,md5(trim(pro_sup_sno)) as pro_sup_sno_md5,md5(trim(if(pro_maf='',maf_name,pro_maf))) as pro_maf_md5 from t_pro_sell t1,t_maf t2,  t_sku t3 WHERE  t1.maf_id = t2.id AND t1.id = t3.pro_sell_id AND t1.pro_sup_sno != '' AND t1.bus_type=2  AND t1.new_data_hash != t1.source_data_hash and t1.supplier_id = 4
+
+//increment master
+select t1.id pid,pro_sno as p,pro_sup_sno,pro_id,date_code,lead_time_cn,lead_time_hk,spq,package, t1.status, pro_name,supplier_id,t2.maf_name as pro_maf,moq,currency_id,base_buy_amounts,buy_price,base_price,pro_num,img_url,bus_type, pro_desc, t3.sku as sku, unix_timestamp() as chrono,md5(trim(pro_sno)) as pro_sno_md5,md5(trim(pro_sup_sno)) as pro_sup_sno_md5,md5(trim(if(pro_maf='',maf_name,pro_maf))) as pro_maf_md5 from t_pro_sell t1,t_maf t2,  t_sku t3 WHERE  t1.maf_id = t2.id AND t1.id = t3.pro_sell_id AND t1.pro_sup_sno != '' AND t1.bus_type=2  AND t1.new_data_hash != t1.source_data_hash and t1.supplier_id = 7
+
+//increment microchip
+select t1.id pid,pro_sno as p,pro_sup_sno,pro_id,date_code,lead_time_cn,lead_time_hk,spq,package, t1.status, pro_name,supplier_id,t2.maf_name as pro_maf,moq,currency_id,base_buy_amounts,buy_price,base_price,pro_num,img_url,bus_type, pro_desc, t3.sku as sku, unix_timestamp() as chrono,md5(trim(pro_sno)) as pro_sno_md5,md5(trim(pro_sup_sno)) as pro_sup_sno_md5,md5(trim(if(pro_maf='',maf_name,pro_maf))) as pro_maf_md5 from t_pro_sell t1,t_maf t2,  t_sku t3 WHERE  t1.maf_id = t2.id AND t1.id = t3.pro_sell_id AND t1.pro_sup_sno != '' AND t1.bus_type=2  AND t1.new_data_hash != t1.source_data_hash and t1.supplier_id = 10
+
+//increment ps
+select t1.id pid,pro_sno as p,pro_sup_sno,pro_id,date_code,lead_time_cn,lead_time_hk,spq,package, t1.status, pro_name,supplier_id,t2.maf_name as pro_maf,moq,currency_id,base_buy_amounts,buy_price,base_price,pro_num,img_url,bus_type, pro_desc, t3.sku as sku, unix_timestamp() as chrono,md5(trim(pro_sno)) as pro_sno_md5,md5(trim(pro_sup_sno)) as pro_sup_sno_md5,md5(trim(if(pro_maf='',maf_name,pro_maf))) as pro_maf_md5 from t_pro_sell t1,t_maf t2,  t_sku t3 WHERE  t1.maf_id = t2.id AND t1.id = t3.pro_sell_id AND t1.pro_sup_sno != '' AND t1.bus_type=2  AND t1.new_data_hash != t1.source_data_hash and t1.supplier_id = 11
+
+//increment vicor
+select t1.id pid,pro_sno as p,pro_sup_sno,pro_id,date_code,lead_time_cn,lead_time_hk,spq,package, t1.status, pro_name,supplier_id,t2.maf_name as pro_maf,moq,currency_id,base_buy_amounts,buy_price,base_price,pro_num,img_url,bus_type, pro_desc, t3.sku as sku, unix_timestamp() as chrono,md5(trim(pro_sno)) as pro_sno_md5,md5(trim(pro_sup_sno)) as pro_sup_sno_md5,md5(trim(if(pro_maf='',maf_name,pro_maf))) as pro_maf_md5 from t_pro_sell t1,t_maf t2,  t_sku t3 WHERE  t1.maf_id = t2.id AND t1.id = t3.pro_sell_id AND t1.pro_sup_sno != '' AND t1.bus_type=2  AND t1.new_data_hash != t1.source_data_hash and t1.supplier_id = 13
+
+//increment avnet
+select t1.id pid,pro_sno as p,pro_sup_sno,pro_id,date_code,lead_time_cn,lead_time_hk,spq,package, t1.status, pro_name,supplier_id,t2.maf_name as pro_maf,moq,currency_id,base_buy_amounts,buy_price,base_price,pro_num,img_url,bus_type, pro_desc, t3.sku as sku, unix_timestamp() as chrono,md5(trim(pro_sno)) as pro_sno_md5,md5(trim(pro_sup_sno)) as pro_sup_sno_md5,md5(trim(if(pro_maf='',maf_name,pro_maf))) as pro_maf_md5 from t_pro_sell t1,t_maf t2,  t_sku t3 WHERE  t1.maf_id = t2.id AND t1.id = t3.pro_sell_id AND t1.pro_sup_sno != '' AND t1.bus_type=2  AND t1.new_data_hash != t1.source_data_hash and t1.supplier_id = 14
+
+//increment rs
+select t1.id pid,pro_sno as p,pro_sup_sno,pro_id,date_code,lead_time_cn,lead_time_hk,spq,package, t1.status, pro_name,supplier_id,t2.maf_name as pro_maf,moq,currency_id,base_buy_amounts,buy_price,base_price,pro_num,img_url,bus_type, pro_desc, t3.sku as sku, unix_timestamp() as chrono,md5(trim(pro_sno)) as pro_sno_md5,md5(trim(pro_sup_sno)) as pro_sup_sno_md5,md5(trim(if(pro_maf='',maf_name,pro_maf))) as pro_maf_md5 from t_pro_sell t1,t_maf t2,  t_sku t3 WHERE  t1.maf_id = t2.id AND t1.id = t3.pro_sell_id AND t1.pro_sup_sno != '' AND t1.bus_type=2  AND t1.new_data_hash != t1.source_data_hash and t1.supplier_id = 22
+
+//increment element14
+select t1.id pid,pro_sno as p,pro_sup_sno,pro_id,date_code,lead_time_cn,lead_time_hk,spq,package, t1.status, pro_name,supplier_id,t2.maf_name as pro_maf,moq,currency_id,base_buy_amounts,buy_price,base_price,pro_num,img_url,bus_type, pro_desc, t3.sku as sku, unix_timestamp() as chrono,md5(trim(pro_sno)) as pro_sno_md5,md5(trim(pro_sup_sno)) as pro_sup_sno_md5,md5(trim(if(pro_maf='',maf_name,pro_maf))) as pro_maf_md5 from t_pro_sell t1,t_maf t2,  t_sku t3 WHERE  t1.maf_id = t2.id AND t1.id = t3.pro_sell_id AND t1.pro_sup_sno != '' AND t1.bus_type=2  AND t1.new_data_hash != t1.source_data_hash and t1.supplier_id = 26
+
+//increment element14cn
+select t1.id pid,pro_sno as p,pro_sup_sno,pro_id,date_code,lead_time_cn,lead_time_hk,spq,package, t1.status, pro_name,supplier_id,t2.maf_name as pro_maf,moq,currency_id,base_buy_amounts,buy_price,base_price,pro_num,img_url,bus_type, pro_desc, t3.sku as sku, unix_timestamp() as chrono,md5(trim(pro_sno)) as pro_sno_md5,md5(trim(pro_sup_sno)) as pro_sup_sno_md5,md5(trim(if(pro_maf='',maf_name,pro_maf))) as pro_maf_md5 from t_pro_sell t1,t_maf t2,  t_sku t3 WHERE  t1.maf_id = t2.id AND t1.id = t3.pro_sell_id AND t1.pro_sup_sno != '' AND t1.bus_type=2  AND t1.new_data_hash != t1.source_data_hash and t1.supplier_id = 34
+
+//increment aipco
+select t1.id pid,pro_sno as p,pro_sup_sno,pro_id,date_code,lead_time_cn,lead_time_hk,spq,package, t1.status, pro_name,supplier_id,t2.maf_name as pro_maf,moq,currency_id,base_buy_amounts,buy_price,base_price,pro_num,img_url,bus_type, pro_desc, t3.sku as sku, unix_timestamp() as chrono,md5(trim(pro_sno)) as pro_sno_md5,md5(trim(pro_sup_sno)) as pro_sup_sno_md5,md5(trim(if(pro_maf='',maf_name,pro_maf))) as pro_maf_md5 from t_pro_sell t1,t_maf t2,  t_sku t3 WHERE  t1.maf_id = t2.id AND t1.id = t3.pro_sell_id AND t1.pro_sup_sno != '' AND t1.bus_type=2  AND t1.new_data_hash != t1.source_data_hash and t1.supplier_id = 27
