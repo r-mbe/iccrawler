@@ -1,6 +1,6 @@
 package seed
 
-import "techtoolkit.ickey.cn/crawlerSZLC/request"
+import "github.com/stanxii/iccrawler/crawlerSZLC/request"
 
 //Seed seed struct
 type Seed struct {

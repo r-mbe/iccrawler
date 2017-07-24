@@ -7,10 +7,10 @@ import (
 	"sync"
 	"time"
 
-	"techtoolkit.ickey.cn/crawlerSZLC/mylog"
-	"techtoolkit.ickey.cn/crawlerSZLC/ocsv"
-	"techtoolkit.ickey.cn/crawlerSZLC/request"
-	"techtoolkit.ickey.cn/crawlerSZLC/seed"
+	"github.com/stanxii/iccrawler/crawlerSZLC/mylog"
+	"github.com/stanxii/iccrawler/crawlerSZLC/ocsv"
+	"github.com/stanxii/iccrawler/crawlerSZLC/request"
+	"github.com/stanxii/iccrawler/crawlerSZLC/seed"
 )
 
 //Links export Links to main Cralwer

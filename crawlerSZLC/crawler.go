@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"log"
 
-	"techtoolkit.ickey.cn/crawlerSZLC/links"
+	"github.com/stanxii/iccrawler/crawlerSZLC/links"
 )
 
 //u := "http://www.szlcsc.com/product/catalog.html"
