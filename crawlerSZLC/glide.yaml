@@ -1,5 +1,7 @@
 package: github.com/stanxii/iccrawler
 import:
+- package: github.com/jinzhu/gorm
+  version: 2a1463811ee1dc85d168fd639a2d4251d030e6e5
 - package: github.com/gocarina/gocsv
   version: eb0665f781337b21e8e193c6f888e2acaa0ff7e4
 - package: github.com/sirupsen/logrus
