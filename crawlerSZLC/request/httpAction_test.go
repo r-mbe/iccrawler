@@ -32,7 +32,8 @@ func TestGetPagesFromNodeJS(t *testing.T) {
 
 //Test crawler detail page from node.js
 func TestGetPageListDetail(t *testing.T) {
-	u := "http://www.szlcsc.com/search/catalog_603_1_0_1-0-0-3-1_0.html&queryBeginPrice=null&queryEndPrice=null"
+	// u := "http://www.szlcsc.com/search/catalog_603_1_0_1-0-0-3-1_0.html&queryBeginPrice=null&queryEndPrice=null"
+	u := "http://www.szlcsc.com/so/catalog_913_12_1-0-0-0-1_0.html?queryProductArrange=0&keyword=&queryBeginPrice=&queryEndPrice=&queryProductStandard=0"
 	PartNumbers, err := GetPageListDetail(u)
 	if err != nil {
 		fmt.Printf("TestGetPagesFromNodeJS url:%s from nodejs err: %v\n", u, err)
