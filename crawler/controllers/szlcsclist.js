@@ -57,9 +57,18 @@ async function getOwnerRow($, html) {
     }
     res.stock = stock;
 
+    let pro_cat = sup.find('td[valign="top"]').eq(1).find('> table > tbody > tr').eq(0).find('>td').eq(0).find('a').first().text().trim().replace(/\s+/g, "").replace(/\r\n|\n/g, "");
+    let pro_brand = sup.find('td[valign="top"]').eq(1).find('> table > tbody > tr').eq(0).find('>td').eq(0).find('a').first().text().trim().replace(/\s+/g, "").replace(/\r\n|\n/g, "");
+
+    let pro_pkg = sup.find('td[valign="top"]').eq(1).find('> table > tbody > tr').eq(2).find('>td').eq(0).text().trim().replace(/\s+/g, "").replace(/\r\n|\n/g, "");
+    let pro_desc = sup.find('td[valign="top"]').eq(1).find('> table > tbody > tr').eq(3).find('>td').eq(0).text().trim().replace(/\s+/g, "").replace(/\r\n|\n/g, "");
+
     let pro_maf = sup.find('td[valign="top"]').eq(1).find('> table > tbody > tr').eq(0).find('>td').eq(1).text().trim().replace(/\s+/g, "").replace(/\r\n|\n/g, "");
     res.part = part;
     res.pro_maf = pro_maf;
+
+    res.pro_cat = pro_cat;
+    res.pro_brand = pr_brand;
 
     //not include index 0 params.
     let prices = $(html).find('td[valign="top"]').eq(2).find('table > tbody > tr').slice(1);
