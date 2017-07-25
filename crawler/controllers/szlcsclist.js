@@ -68,7 +68,7 @@ async function getOwnerRow($, html) {
     res.pro_maf = pro_maf;
 
     res.pro_cat = pro_cat;
-    res.pro_brand = pr_brand;
+    res.pro_brand = pro_brand;
 
     //not include index 0 params.
     let prices = $(html).find('td[valign="top"]').eq(2).find('table > tbody > tr').slice(1);
