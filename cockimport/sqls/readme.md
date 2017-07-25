@@ -4,6 +4,14 @@
 ## insecure model
 # login in insecure
 
+## step 2
+
+aliyun
+cockroach sql  --insecure --host=172.31.225.122  < db_product.sql
+cockroach sql -u stan --insecure --host=172.31.225.122 < db_product_tables.sql
+
+
+
 ## step 3
 cockroach sql --insecure --host=10.8.15.167 < root.sql
 cockroach sql --insecure --host=10.8.15.167 < db_product.sql

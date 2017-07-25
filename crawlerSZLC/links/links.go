@@ -1,6 +1,7 @@
 package links
 
 import (
+	"context"
 	"errors"
 	"fmt"
 	"log"
@@ -174,10 +175,32 @@ func (l *Links) convertAndSave(d interface{}) error {
 	return nil
 }
 
+//StorageCockDB channel one the last channel close done channal for singal all channal done
+func (l *Links) StorageCockDB(ctx context.Context, in <-chan interface{}, done chan<- struct{}) {
+	//consurmer
+	queue := []interface{}{}
+
+	for {
+		select {
+		case <-ctx.Done():
+			return
+		case v, _ := <-in:
+			//do resualt.\
+			fmt.Println("XXXXOOOOO##### len(queue) storage channel==", len(queue))
+			if len(queue) == 5000 {
+				//save to db
+				fmt.Println(">>>>>>>>>>>>>>>>>>>>500000 ##### len(queue) storage channel==", len(queue))
+			} else {
+				queue = append(queue, v)
+			}
+
+		}
+	}
+}
+
 //Storages channel one the last channel close done channal for singal all channal done
 func (l *Links) Storages(in <-chan interface{}, done chan<- struct{}) {
 	//consurmer
-	defer close(done)
 	for {
 		select {
 		case v, ok := <-in:
@@ -298,19 +321,26 @@ func (l *Links) CrawlerSZLC(urls []string) error {
 
 	list := make(chan string)
 	pages := make(chan string)
-	storages := make(chan interface{})
+	storages := make(chan interface{}, 5000)
 
 	done := make(chan struct{})
 
+	ctx, cancel := context.WithCancel(context.Background())
 	//input, out-chan, out-chan
 
 	go l.detailURLS(pages, list)
 	go l.detailPage(storages, pages)
-	go l.Storages(storages, done)
+
+	//storage to csv
+	// go l.Storages(storages, done)
+
+	go l.StorageCockDB(ctx, storages, done)
 
 	defer close(storages)
 	defer l.l.Close()
 	defer close(list)
+
+	defer close(done)
 
 	for i := 0; i < 100; i++ {
 		fmt.Println("Loop once, Your turn.")
@@ -330,6 +360,8 @@ func (l *Links) CrawlerSZLC(urls []string) error {
 	//wait all finished.
 
 	<-done
+
+	defer cancel()
 
 	end := time.Now().Unix()
 	fmt.Printf("All Done:  spend - time %d\n", end-start)
