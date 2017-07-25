@@ -192,47 +192,75 @@ type TProSellPrice struct {
 	LUptime    time.Time `gorm:"column:luptime"`
 }
 
-func (c *Client) Close() {
-	c.DB.Close()
+//CSVPartNumber csvpart
+type CockPartNumber struct {
+	ID                  int64
+	Part                string  `gorm:"column:pro_sno"`
+	Cat                 string  `gorm:"column:pro_cat"`
+	Imag                string  `gorm:"column:pro_img"`
+	Promaf              string  `gorm:"column:pro_maf"`
+	BaseSalePrice       float64 `gorm:"column:base_sale_price"`
+	Stock               int64   `gorm:"column:stock"`
+	SupPart             string  `gorm:"column:suppart"`
+	Moq                 int64   `gorm:"column:moq"`
+	Mbuy                float64 `gorm:"column:mbuy"`
+	Currency            string  `gorm:"column:currency"`
+	KuCunDi             string  `gorm:"column:kucundi"`
+	CunHuoWeiZhi        string  `gorm:"column:kucunweizi"`
+	BasePurchasePrice   float64 `gorm:"column:base_pur_price"`
+	PiHao               string  `gorm:"column:pihao"`
+	Package             string  `gorm:"column:pkg"`
+	Spq                 int64   `gorm:"column:spq"`
+	FutureCN            string  `gorm:"column:futurecn"`
+	futureHK            string  `gorm:"column:futurehk"`
+	Pname               string  `gorm:"column:pname"`
+	PurchaseNum1        int64   `gorm:"column:purnum1"`
+	PurchaseNum2        int64   `gorm:"column:purnum2"`
+	PurchaseNum3        int64   `gorm:"column:purnum3"`
+	PurchaseNum4        int64   `gorm:"column:purnum4"`
+	PurchaseNum5        int64   `gorm:"column:purnum5"`
+	PurchaseNum6        int64   `gorm:"column:purnum6"`
+	PurchaseNum7        int64   `gorm:"column:purnum7"`
+	PurchaseNum8        int64   `gorm:"column:purnum8"`
+	PurchaseNum9        int64   `gorm:"column:purnum9"`
+	PurchaseNum10       int64   `gorm:"column:purnum10"`
+	SalesUnitPrice1     float64 `gorm:"column:saluprice1"`
+	SalesUnitPrice2     float64 `gorm:"column:saluprice2"`
+	SalesUnitPrice3     float64 `gorm:"column:saluprice3"`
+	SalesUnitPrice4     float64 `gorm:"column:saluprice4"`
+	SalesUnitPrice5     float64 `gorm:"column:saluprice5"`
+	SalesUnitPrice6     float64 `gorm:"column:saluprice6"`
+	SalesUnitPrice7     float64 `gorm:"column:saluprice7"`
+	SalesUnitPrice8     float64 `gorm:"column:saluprice8"`
+	SalesUnitPrice9     float64 `gorm:"column:saluprice9"`
+	SalesUnitPrice10    float64 `gorm:"column:saluprice10"`
+	PurchaseUnitPrice1  float64 `gorm:"column:purunit_price1"`
+	PurchaseUnitPrice2  float64 `gorm:"column:purunit_price2"`
+	PurchaseUnitPrice3  float64 `gorm:"column:purunit_price3"`
+	PurchaseUnitPrice4  float64 `gorm:"column:purunit_price4"`
+	PurchaseUnitPrice5  float64 `gorm:"column:purunit_price5"`
+	PurchaseUnitPrice6  float64 `gorm:"column:purunit_price6"`
+	PurchaseUnitPrice7  float64 `gorm:"column:purunit_price7"`
+	PurchaseUnitPrice8  float64 `gorm:"column:purunit_price8"`
+	PurchaseUnitPrice9  float64 `gorm:"column:purunit_price9"`
+	PurchaseUnitPrice10 float64 `gorm:"column:purunit_price10"`
+	Comments            string  `gorm:"column:comments"`
+	Description         string  `gorm:"column:pro_desc"`
+	SaleChannel         string  `gorm:"column:sale_channel"`
+	ProductDetail       string  `gorm:"column:pro_detail"`
+	Datasheet           string  `gorm:"column:datasheet"`
+	Rosh                string  `gorm:"column:rosh"`
+	StockBiaoStock      string  `gorm:"column:stock_biao"`
+	NotUse1             string  `gorm:"column:not_use1"`
+	NotUse2             string  `gorm:"column:not_use2"`
+	PartEN              string  `gorm:"column:parten"`
+	PromatEN            string  `gorm:"column:promaten"`
+	FutureEN            string  `gorm:"column:futureen"`
+	DescriptionEN       string  `gorm:"column:descen"`
 }
 
-func (c *Client) DoCreateStock(body map[string]interface{}) error {
-	defer func() {
-		if err := recover(); err != nil {
-			fmt.Println("recoverd in DoCreateStock")
-			seelog := *c.Seelog
-			seelog.Errorf("db find error %v", err)
-		}
-	}()
-
-	var stock TProSellStock
-
-	fmt.Printf(" body = %v \n", body)
-	if _, ok := body["sku"]; ok {
-		stock.Sku = body["sku"].(int64)
-	} else {
-		fmt.Println("have no sku pk error.")
-		return errors.New("no found sku.")
-	}
-	if _, ok := body["stock_num"]; ok {
-		stock.Stocknum = body["stock_num"].(int64)
-	}
-	if _, ok := body["frozen_num"]; ok {
-		stock.Frozennum = body["frozen_num"].(int64)
-	}
-	if _, ok := body["virtual_num"]; ok {
-		stock.Virtualnum = body["virtual_num"].(int64)
-	}
-	stock.LUptime = time.Now()
-
-	err := c.DB.Create(&stock).Error
-	if err != nil {
-		seelog := *c.Seelog
-		seelog.Errorf("db find error %v", err)
-		return err
-	}
-	return nil
-
+func (c *Client) Close() {
+	c.DB.Close()
 }
 
 func (c *Client) DoUpdateStock(body map[string]interface{}) error {
@@ -332,79 +360,4 @@ func (c *Client) DoUpdatePrice(body map[string]interface{}) error {
 	c.DB.Where(map[string]interface{}{"mysql_id": price.MysqlID}).Updates(price)
 	return nil
 
-}
-
-func (c *Client) Do(w string, body map[string]interface{}) error {
-
-	if strings.EqualFold(w, "stock") {
-		c.DoUpdateStock(body)
-	} else if strings.EqualFold(w, "price") {
-		c.DoUpdatePrice(body)
-	} else {
-		fmt.Println("Unkow type")
-		seelog := *c.Seelog
-		seelog.Errorf("Unkow type")
-		return errors.New("Unkonw type")
-	}
-	return nil
-}
-
-//do stan
-
-func (c *Client) DoDeleteStock(body map[string]interface{}) {
-	defer func() {
-		if err := recover(); err != nil {
-			fmt.Println("recoverd in Delete")
-			seelog := *c.Seelog
-			seelog.Info("db Delete error %v", err)
-		}
-	}()
-
-	c.DB.Delete(TProSellStock{}, "sku = ?", body["sku"])
-}
-
-func (c *Client) DoDeletePrice(body map[string]interface{}) {
-	defer func() {
-		if err := recover(); err != nil {
-			fmt.Println("recoverd in Delete")
-			seelog := *c.Seelog
-			seelog.Info("db Delete error %v", err)
-		}
-	}()
-
-	c.DB.Delete(TProSellPrice{}, "sku = ?", body["sku"])
-
-}
-
-func (c *Client) DoBulk(items []*BulkRequest) (*BulkResponse, error) {
-	errcount := 0
-
-	for _, item := range items {
-		if err := c.CockroachBulk(item); err != nil {
-			// return nil, errors.Trace(err)
-			errcount++
-			seelog := *c.Seelog
-			// log.Errorf("%s index: %s, type: %s, id: %s, status: %d, error: %s",
-			seelog.Errorf("%s index: %s, type: %s, id: %s",
-				item.Action, item.Index, item.Type, item.ID)
-		}
-	}
-
-	var err error
-	ret := new(BulkResponse)
-	if 0 == errcount {
-		ret.Code = 0
-		err = nil
-	} else {
-		ret.Code = errcount
-		err = errors.Errorf("bulk num > 1: %v", errcount)
-	}
-
-	return ret, err
-}
-
-// only support parent in 'Bulk' related apis
-func (c *Client) Bulk(items []*BulkRequest) (*BulkResponse, error) {
-
-	return c.DoBulk(items)
 }

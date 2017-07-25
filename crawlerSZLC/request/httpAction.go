@@ -32,6 +32,10 @@ type PartNumber struct {
 	Part    string    `json:"part"`
 	Promaf  string    `json:"pro_maf"`
 	Stock   int64     `json:"stock"`
+	Cat     string    `json:"pro_cat"`
+	Detail  string    `json:"pro_detail"`
+	Pkg     string    `json:"pro_pkg"`
+	Desc    string    `json:"pro_desc"`
 }
 
 //PartNumberResponse part

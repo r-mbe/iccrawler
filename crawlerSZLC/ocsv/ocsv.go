@@ -22,6 +22,7 @@ type Ocsv struct {
 //CSVPartNumber csvpart
 type CSVPartNumber struct {
 	Part                string  `csv:"*产品型号"`
+	Cat                 string  `csv:"*产品类别"`
 	Imag                string  `csv:"图片名称"`
 	Promaf              string  `csv:"*厂牌"`
 	BaseSalePrice       float64 `csv:"基础销售价"`

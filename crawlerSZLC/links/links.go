@@ -8,6 +8,7 @@ import (
 	"sync"
 	"time"
 
+	"github.com/stanxii/iccrawler/crawlerSZLC/cockroach"
 	"github.com/stanxii/iccrawler/crawlerSZLC/mylog"
 	"github.com/stanxii/iccrawler/crawlerSZLC/ocsv"
 	"github.com/stanxii/iccrawler/crawlerSZLC/request"
@@ -16,7 +17,7 @@ import (
 
 //Links export Links to main Cralwer
 type Links struct {
-	Cat    string
+	cock   *cockroach.Client
 	s      *seed.Seed
 	c      *ocsv.Ocsv
 	l      *mylog.Log
@@ -50,6 +51,24 @@ func (l *Links) init() {
 	if err != nil {
 		log.Fatal(err)
 	}
+
+	isDebug := true
+	//init cockroachdb
+	// var dbURL, nsqaddr, ntopic, nchannel string
+	var dbURL string
+	if isDebug {
+		// nsqaddr = "10.8.15.9:4161"
+		// ntopic = "topic_cock"
+		// nchannel = "channel_price"
+		dbURL = "postgresql://stan:888888@172.31.225.122:26257/db_product?sslmode=disable"
+	} else {
+		// nsqaddr = "10.8.51.50:4161"
+		// ntopic = "topic_cock"
+		// nchannel = "channel_price"
+		dbURL = "postgresql://stan@10.8.51.69:26257/db_product?sslcert=/usr/local/ickey-certs/client-stan/client.stan.crt&sslkey=/usr/local/ickey-certs/client-stan/client.stan.key&sslrootcert =/usr/local/ickey-certs/client-stan/ca.crt&sslmode=require"
+	}
+
+	l.cock = cockroach.NewClient(dbURL)
 
 	l.l = mylog.NewLog()
 	l.l.Init("szlcsc.log")
@@ -113,10 +132,16 @@ func (l *Links) convertAndSave(d interface{}) error {
 	if !ok {
 		return errors.New("Err data error")
 	}
+
 	o.Part = in.Part
 	o.Comments = in.Keyword
 	o.Promaf = in.Promaf
 	o.Stock = in.Stock
+
+	o.Cat = in.Cat
+	o.ProductDetail = in.Detail
+	o.Package = in.Pkg
+	o.Description = in.Desc
 
 	//非数字
 	// pattern := `[\\d+$]`
@@ -175,6 +200,21 @@ func (l *Links) convertAndSave(d interface{}) error {
 	return nil
 }
 
+func (l *Links) DoCockStorage(d interface{}) error {
+
+	in, ok := d.(request.PartNumber)
+	if !ok {
+		return errors.New("Err data error")
+	}
+
+	err := l.cock.DoSave(in)
+	if err != nil {
+		return errors.New("db save err.")
+	}
+
+	return nil
+}
+
 //StorageCockDB channel one the last channel close done channal for singal all channal done
 func (l *Links) StorageCockDB(ctx context.Context, in <-chan interface{}, done chan<- struct{}) {
 	//consurmer
@@ -190,6 +230,10 @@ func (l *Links) StorageCockDB(ctx context.Context, in <-chan interface{}, done c
 			if len(queue) == 5000 {
 				//save to db
 				fmt.Println(">>>>>>>>>>>>>>>>>>>>500000 ##### len(queue) storage channel==", len(queue))
+
+				for _, item := range queue {
+					l.DoCockStorage(item)
+				}
 			} else {
 				queue = append(queue, v)
 			}
