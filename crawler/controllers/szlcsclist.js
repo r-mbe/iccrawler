@@ -5,7 +5,7 @@ let moment = require("moment");
 var config = require('config');
 var proxM = require('./getProxyIps')
 
-let baseurl = 'http://www.szlcsc.com/search/global.html&global_search_keyword=';
+let baseurl = 'http://www.szlcsc.com/so/global.html&global_search_keyword=';
 
 //http://www.szlcsc.com/search/global.html&global_search_keyword=2222&global_current_catalog=&search_type=
 
@@ -204,7 +204,10 @@ async function getByKeyword(keyword) {
 
     //http://www.szlcsc.com/search/catalog_603_1_0_1-0-0-3-1_0.html&queryBeginPrice=null&queryEndPrice=null
     // var url = baseurl + keyword + "&global_current_catalog=&search_type=";
+
     var url = keyword;
+
+    console.log("nightmare szcsclist XXX will goto url===.", url);
 
     await nightmare
         .useragent('Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/57.0.2987.110 Safari/537.36')
