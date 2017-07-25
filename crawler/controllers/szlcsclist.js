@@ -204,8 +204,12 @@ async function getByKeyword(keyword) {
 
     //http://www.szlcsc.com/search/catalog_603_1_0_1-0-0-3-1_0.html&queryBeginPrice=null&queryEndPrice=null
     // var url = baseurl + keyword + "&global_current_catalog=&search_type=";
-
-    var url = keyword;
+    var url = {}
+    if Array.isArray(keyword) {
+        url = keyword[0]
+    } else {
+       url = keyword;
+    }
 
     console.log("nightmare szcsclist XXX will goto url===.", url);
 
