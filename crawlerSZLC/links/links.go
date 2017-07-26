@@ -117,7 +117,7 @@ func (l *Links) CrawlerDetailPageFromNode(href string, out chan<- interface{}) {
 			continue
 		} else {
 			for i, v := range data {
-				fmt.Printf("###>>>>>>>---->>>>ok-ok-ok will save cs data  %v\n", i, href, data)
+				fmt.Printf("###>>>>>>>---->>>>ok-ok-ok will save cs data i=%v, href=%v, v=%v \n", i, href, v)
 
 				out <- v
 			}
@@ -352,8 +352,12 @@ func (l *Links) detailURLS(out chan<- string, in <-chan string) {
 				for i = 0; i < 5; i++ {
 
 					data, err = l.CrawlerCatListFromNode(href)
-					if err == nil {
+					if len(data) > 0 {
+						fmt.Println(">>>>>>>>>>>>>>>>Get list from node len >0 ", len(data))
 						break
+					}
+					if err != nil {
+						fmt.Println("l.CrawlerCatListFromNode: err", err)
 					}
 				}
 				if i >= 5 {
@@ -361,6 +365,7 @@ func (l *Links) detailURLS(out chan<- string, in <-chan string) {
 					l.l.Error("err get page max" + href)
 				}
 
+				fmt.Println("List page url len=", href, len(data))
 				for i, u := range data {
 					fmt.Printf(">>>XXXXX Go detailURLS  sending  i=%d,url=%s\n", i, u)
 					out <- u
