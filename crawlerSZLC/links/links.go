@@ -70,6 +70,7 @@ func (l *Links) init() {
 
 	l.cock = cockroach.NewClient(dbURL)
 
+	fmt.Println("Creating table ")
 	if isDebug {
 		fmt.Println("debug model ")
 		return

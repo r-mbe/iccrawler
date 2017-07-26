@@ -29,10 +29,15 @@ func NewClient(dbURL string) *Client {
 	}
 	c.DB = db
 
+	fmt.Println("now will create table cockpark")
 	//if table not exist create table
-	if !c.DB.HasTable(&CockPartNumber{}) {
+	hasTable := c.DB.HasTable(&CockPartNumber{})
+	fmt.Println("hasTable not hasTable. == .", hasTable)
+	if !hasTable {
 		fmt.Println("Table not exist. create it.")
 		c.DB.Create(&CockPartNumber{})
+	} else {
+		fmt.Println("Table exist. true it.")
 	}
 
 	return c
