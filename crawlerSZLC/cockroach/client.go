@@ -1,7 +1,6 @@
 package cockroach
 
 import (
-	"errors"
 	"fmt"
 	"log"
 	"time"
@@ -217,11 +216,6 @@ func (c *Client) DoSave(p request.PartNumber) error {
 	pt := CockPartNumber{}
 
 	convertReqToCock(p, &pt)
-
-	if c.DB.Where("pro_sno = ? AND pro_maf=?  AND  luptime=?", pt.Part, pt.Promaf, pt.LUptime).First(&CockPartNumber{}).RecordNotFound() {
-		fmt.Println("data alread exist is db", pt)
-		return errors.New("dat had already exist.")
-	}
 
 	c.DB.Create(&pt)
 
