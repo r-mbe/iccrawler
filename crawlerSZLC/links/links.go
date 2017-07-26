@@ -81,7 +81,6 @@ func (l *Links) GetSeedURLS(u string) ([]string, error) {
 	//init data
 
 	seeds, err := l.s.RootLinksGet(u)
-	l.s.RootLinksGet(u)
 	if err != nil {
 		log.Fatal(err)
 	}
