@@ -38,7 +38,7 @@ func NewLinks() *Links {
 
 //Close release
 func (l *Links) Close() {
-	defer l.c.Close()
+	// defer l.c.Close()
 	defer l.cock.Close()
 }
 
@@ -47,11 +47,12 @@ func (l *Links) init() {
 	// c.hosts = make(map[string]struct{}, len(ctxs))
 	l.s = new(seed.Seed)
 	l.Wg = new(sync.WaitGroup)
-	l.c = ocsv.NewOcsv()
-	err := l.c.Init()
-	if err != nil {
-		log.Fatal(err)
-	}
+
+	// l.c = ocsv.NewOcsv()
+	// err := l.c.Init()
+	// if err != nil {
+	// 	log.Fatal(err)
+	// }
 
 	isDebug := true
 	//init cockroachdb
