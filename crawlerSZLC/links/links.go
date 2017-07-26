@@ -122,7 +122,7 @@ func (l *Links) CrawlerDetailPageFromNode(href string, out chan<- interface{}) {
 				out <- v
 			}
 			//i < 3 break ok
-			break
+			return
 		}
 
 	}
@@ -248,6 +248,7 @@ func (l *Links) StorageCockDB(ctx context.Context, in <-chan interface{}, done c
 					l.DoCockStorage(item)
 				}
 				queue = nil
+				fmt.Println("XXXXOOOOO##### after Nil len(queue)  channel==", len(queue))
 
 			} else {
 				queue = append(queue, v)
@@ -343,17 +344,17 @@ func (l *Links) detailURLS(out chan<- string, in <-chan string) {
 		case href, ok := <-in:
 			//do resualt.\
 			if ok {
-				fmt.Printf("received chan: list url= %s\n", href)
+				fmt.Printf(">>>detailURLS Received chan: list url= %s\n", href)
 				// go l.CrawlerCatListFromNode(href, out)
 				//if crawler max page num err retry 3 times.
 				var i int
 				for i = 0; i < 5; i++ {
+					fmt.Printf(">>>XXXXXAfter retry get max page err i=%d,url=%s\n", i, href)
 					err := l.CrawlerCatListFromNode(href, out)
 					if err == nil {
 						break
 					}
 				}
-				fmt.Printf(">>>XXXXXAfter retry get max page err i=%d,url=%s\n", i, href)
 				if i >= 5 {
 					fmt.Printf(">>>XXXXXAfter retry get max page err url=%s\n", href)
 					l.l.Error("err get page max" + href)
