@@ -70,6 +70,11 @@ func (l *Links) init() {
 
 	l.cock = cockroach.NewClient(dbURL)
 
+	if isDebug {
+		fmt.Println("debug model ")
+		return
+	}
+
 	l.l = mylog.NewLog()
 	l.l.Init("szlcsc.log")
 

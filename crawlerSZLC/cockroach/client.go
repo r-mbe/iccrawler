@@ -124,6 +124,10 @@ type CockPartNumber struct {
 	LUptime             time.Time `gorm:"column:luptime"`
 }
 
+func (c CockPartNumber) TableName() string {
+	return "t_pro_sell"
+}
+
 func (c *Client) Close() {
 	c.DB.Close()
 }
