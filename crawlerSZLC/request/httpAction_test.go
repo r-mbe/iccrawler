@@ -20,6 +20,7 @@ func TestGetCatListFromNodeJS(t *testing.T) {
 
 //Test crawler detail page from node.js
 func TestGetPagesFromNodeJS(t *testing.T) {
+	// u := "http://www.szlcsc.com/catalog/924.html"
 	u := "http://www.szlcsc.com/catalog/924.html"
 	pURL, max, sURL, err := GetPagesFromNodeJS(u)
 	if err != nil {

@@ -116,8 +116,8 @@ func (l *Links) CrawlerDetailPageFromNode(href string, out chan<- interface{}) {
 			fmt.Printf("http reques detail page:%s from nodejs err: %v, data:%v \n", href, err, data)
 			continue
 		} else {
-			for _, v := range data {
-				fmt.Printf("###>>>>>>>---->>>>ok-ok-ok will save cs data  %v\n", data)
+			for i, v := range data {
+				fmt.Printf("###>>>>>>>---->>>>ok-ok-ok will save cs data  %v\n", i, href, data)
 
 				out <- v
 			}
@@ -305,13 +305,13 @@ func (l *Links) detailPage(out chan<- interface{}, in <-chan string) {
 }
 
 //CrawlerCatListFromNode page
-func (l *Links) CrawlerCatListFromNode(url string, out chan<- string) error {
+func (l *Links) CrawlerCatListFromNode(url string) ([]string, error) {
 	// l.Wg.Add(1)
-
+	var res []string
 	pURL, max, sURL, err := l.s.GetPagesFromNodeJS(url)
 	if err != nil {
 		fmt.Printf("CrawlerCatListFromNode url:%s from nodejs err: %v\n", url, err)
-		return err
+		return nil, err
 	}
 
 	fmt.Printf("######## >>>> GetPagesFromNodeJS pre: %s, max: %d, sufix: %s len\n", pURL, max, sURL)
@@ -320,19 +320,18 @@ func (l *Links) CrawlerCatListFromNode(url string, out chan<- string) error {
 		for i := 1; i <= max; i++ {
 			s := fmt.Sprintf("%s%d%s", pURL, i, sURL)
 			fmt.Printf("########### >>>>After send to l.out<- list: %s,  %v\n", s, max)
-			out <- s
+			res = append(res, s)
 		}
-
 	} else if max == 1 {
 		s := fmt.Sprintf("%s%d%s", pURL, max, sURL)
 		// fmt.Printf("###After send to l.out<- list: %s  %v\n", s, max)
-		out <- s
+		res = append(res, s)
 	} else {
 		//error
-		return errors.New("max=0")
+		return nil, errors.New("max=0")
 	}
 
-	return nil
+	return res, nil
 }
 
 //ListPage out channel for list page. first output channel
@@ -347,10 +346,12 @@ func (l *Links) detailURLS(out chan<- string, in <-chan string) {
 				fmt.Printf(">>>detailURLS Received chan: list url= %s\n", href)
 				// go l.CrawlerCatListFromNode(href, out)
 				//if crawler max page num err retry 3 times.
+				var data []string
+				var err error
 				var i int
 				for i = 0; i < 5; i++ {
-					fmt.Printf(">>>XXXXXAfter retry get max page err i=%d,url=%s\n", i, href)
-					err := l.CrawlerCatListFromNode(href, out)
+
+					data, err = l.CrawlerCatListFromNode(href)
 					if err == nil {
 						break
 					}
@@ -358,6 +359,11 @@ func (l *Links) detailURLS(out chan<- string, in <-chan string) {
 				if i >= 5 {
 					fmt.Printf(">>>XXXXXAfter retry get max page err url=%s\n", href)
 					l.l.Error("err get page max" + href)
+				}
+
+				for i, u := range data {
+					fmt.Printf(">>>XXXXX Go detailURLS  sending  i=%d,url=%s\n", i, u)
+					out <- u
 				}
 
 			} else {
