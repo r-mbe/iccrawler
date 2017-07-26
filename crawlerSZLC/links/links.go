@@ -39,6 +39,7 @@ func NewLinks() *Links {
 //Close release
 func (l *Links) Close() {
 	defer l.c.Close()
+	defer l.cock.Close()
 }
 
 func (l *Links) init() {
@@ -68,6 +69,7 @@ func (l *Links) init() {
 		dbURL = "postgresql://stan@10.8.51.69:26257/db_product?sslcert=/usr/local/ickey-certs/client-stan/client.stan.crt&sslkey=/usr/local/ickey-certs/client-stan/client.stan.key&sslrootcert =/usr/local/ickey-certs/client-stan/ca.crt&sslmode=require"
 	}
 
+	fmt.Println("cockdb db string ", dbURL)
 	l.cock = cockroach.NewClient(dbURL)
 
 	fmt.Println("Creating table ")

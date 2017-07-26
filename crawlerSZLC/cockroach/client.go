@@ -35,7 +35,7 @@ func NewClient(dbURL string) *Client {
 	fmt.Println("hasTable not hasTable. == .", hasTable)
 	if !hasTable {
 		fmt.Println("Table not exist. create it.")
-		c.DB.Create(&CockPartNumber{})
+		c.DB.CreateTable(&CockPartNumber{})
 	} else {
 		fmt.Println("Table exist. true it.")
 	}
@@ -55,8 +55,8 @@ func setupDatabase(dbURL string) (*gorm.DB, error) {
 	}
 
 	// Allow a maximum of concurrency+1 connections to the database.
-	db.DB().SetMaxOpenConns(1000 + 1)
-	db.DB().SetMaxIdleConns(1000 + 1)
+	db.DB().SetMaxOpenConns(100 + 1)
+	db.DB().SetMaxIdleConns(100 + 1)
 
 	return db, nil
 }
