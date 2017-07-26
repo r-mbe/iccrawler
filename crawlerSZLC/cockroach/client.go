@@ -218,7 +218,7 @@ func (c *Client) DoSave(p request.PartNumber) error {
 
 	convertReqToCock(p, &pt)
 
-	if c.DB.Where("part = ? AND pro_maf AND stock=?", p.Part, p.Promaf, p.Stock).First(&CockPartNumber{}).RecordNotFound() {
+	if c.DB.Where("pro_sno = ? AND pro_maf AND stock=?", p.Part, p.Promaf, p.Stock).First(&CockPartNumber{}).RecordNotFound() {
 		fmt.Println("data alread exist is db")
 		return errors.New("dat had already exist.")
 	}

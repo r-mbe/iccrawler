@@ -70,15 +70,7 @@ func (l *Links) init() {
 		dbURL = "postgresql://stan@10.8.51.69:26257/db_product?sslcert=/usr/local/ickey-certs/client-stan/client.stan.crt&sslkey=/usr/local/ickey-certs/client-stan/client.stan.key&sslrootcert =/usr/local/ickey-certs/client-stan/ca.crt&sslmode=require"
 	}
 
-	fmt.Println("cockdb db string ", dbURL)
 	l.cock = cockroach.NewClient(dbURL)
-
-	fmt.Println("Creating table ")
-	if isDebug {
-		fmt.Println("debug model ")
-		return
-	}
-
 	l.l = mylog.NewLog()
 	l.l.Init("szlcsc.log")
 
@@ -401,7 +393,7 @@ func (l *Links) CrawlerSZLC(urls []string) error {
 	defer close(done)
 
 	for i := 0; i < 100; i++ {
-		fmt.Println("Loop once, Your turn.")
+		fmt.Println("Looping......................time once, Your turn.", i)
 		begin := time.Now()
 		l.ListURLS(urls, list)
 
