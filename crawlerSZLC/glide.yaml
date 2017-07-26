@@ -1,5 +1,7 @@
 package: github.com/stanxii/iccrawler
 import:
+- package: github.com/stanxii/cuckoofilter
+  version: db9854a1f534a4ae06ceaad7a98b10519dadc715
 - package: github.com/jinzhu/gorm
   version: 2a1463811ee1dc85d168fd639a2d4251d030e6e5
 - package: github.com/gocarina/gocsv
