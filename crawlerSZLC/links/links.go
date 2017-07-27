@@ -8,7 +8,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/stanxii/cuckoofilter"
+	"github.com/seiflotfy/cuckoofilter"
 	"github.com/stanxii/iccrawler/crawlerSZLC/cockroach"
 	"github.com/stanxii/iccrawler/crawlerSZLC/mylog"
 	"github.com/stanxii/iccrawler/crawlerSZLC/ocsv"
@@ -22,7 +22,7 @@ type Links struct {
 	s      *seed.Seed
 	c      *ocsv.Ocsv
 	l      *mylog.Log
-	cf     *cuckoofilter.CFilter
+	cf     *cuckoofilter.CuckooFilter
 	out    chan string
 	finish chan int
 	Wg     *sync.WaitGroup
@@ -50,7 +50,8 @@ func (l *Links) init() {
 	l.s = new(seed.Seed)
 	l.Wg = new(sync.WaitGroup)
 
-	l.cf = cuckoofilter.New()
+	//cuckoofilter size = 5000w  bucket slot size = 4
+	l.cf = cuckoofilter.NewCuckooFilter(50000000)
 	// l.c = ocsv.NewOcsv()
 	// err := l.c.Init()
 	// if err != nil {
@@ -88,9 +89,6 @@ func (l *Links) GetSeedURLS(u string) ([]string, error) {
 		log.Fatal(err)
 	}
 
-	for i, v := range seeds {
-		fmt.Printf("a[%d] = %s\n", i, v)
-	}
 	return seeds, err
 
 }
@@ -102,11 +100,12 @@ func (l *Links) CrawlerDetailPageFromNode(href string, out chan<- interface{}) {
 	var data []request.PartNumber
 	var err error
 
-	b := l.cf.Lookup([]byte(href))
-	if b {
-		fmt.Println("ERR########## href exist. do crawler twice.", href)
-		return
-	}
+	// fmt.Println("Coockfilter counting", l.cf.Count())
+	// b := l.cf.Lookup([]byte(href))
+	// if b {
+	// 	fmt.Println("ERR########## href exist. do crawler twice.", href)
+	// 	return
+	// }
 
 	var i int
 	for i = 0; i < 3; i++ {
@@ -122,7 +121,10 @@ func (l *Links) CrawlerDetailPageFromNode(href string, out chan<- interface{}) {
 				out <- v
 			}
 			//i < 3 break ok
-			return
+
+			// l.cf.Insert([]byte(href))
+
+			break
 		}
 
 	}
@@ -131,9 +133,6 @@ func (l *Links) CrawlerDetailPageFromNode(href string, out chan<- interface{}) {
 	if i >= 15 {
 		fmt.Printf(">>>XXXXXAfter retry get detail page err url=%s\n", href)
 		l.l.Error("err get page max" + href)
-	} else {
-		//successful add in bloom filter.
-		l.cf.Insert([]byte(href))
 	}
 
 }
@@ -287,15 +286,15 @@ func (l *Links) detailPage(out chan<- interface{}, in <-chan string) {
 			if ok {
 				fmt.Println("received one page: ", page)
 
-				b := l.cf.Lookup([]byte(page))
-				if b {
-					fmt.Println("ERR Bloom filter ########## check detailPage.", page)
-					return
-				}
+				// b := l.cf.Lookup([]byte(page))
+				// if b {
+				// 	fmt.Println("ERR Bloom filter ########## check detailPage.", page)
+				// 	return
+				// }
 
 				l.CrawlerDetailPageFromNode(page, out)
 
-				l.cf.Insert([]byte(page))
+				// l.cf.Insert([]byte(page))
 			} else {
 				fmt.Println("received all chan pages")
 				return

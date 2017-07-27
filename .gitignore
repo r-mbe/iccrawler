@@ -16,3 +16,5 @@
 indexRiver/logs
 src
 crawler/node_modules
+crawlerSZLC/vendor
+crawlerSZLC/glide.lock
