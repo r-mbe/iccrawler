@@ -10,7 +10,7 @@ aliyun
 cockroach sql  --insecure --host=172.31.225.122  < db_product.sql
 cockroach sql -u stan --insecure --host=172.31.225.122 < db_product_tables.sql
 
-
+cockroach sql -u stan --insecure --host=172.31.225.122  -d  db_product
 ## config hosts
 /etc/hosts
 172.31.225.122  iZj6cbv0sbzom9p7hjovcuZ
