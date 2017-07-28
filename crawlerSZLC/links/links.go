@@ -435,13 +435,13 @@ func (l *Links) CrawlerSZLC(urls []string) error {
 	defer l.l.Close()
 	defer close(list)
 
-	for i := 0; i < corrency; i++ {
-		done := make(chan struct{})
-		defer close(done)
+	done := make(chan struct{})
+	ctx, cancel := context.WithCancel(context.Background())
+	go l.StorageCockDB(ctx, storages, done)
+	defer close(storages)
+	defer close(done)
 
-		ctx, cancel := context.WithCancel(context.Background())
-		go l.StorageCockDB(ctx, storages, done)
-		defer close(storages)
+	for i := 0; i < corrency; i++ {
 
 		begin := time.Now()
 		fmt.Println("Looping......................time once, Your turn.", i, begin)
@@ -459,12 +459,10 @@ func (l *Links) CrawlerSZLC(urls []string) error {
 			case <-time.After(time.Second * time.Duration(dur)):
 			}
 		}
-
-		cancel()
-		<-done
-
 	}
 
+	<-done
+	cancel()
 	//wait all finished.
 
 	end := time.Now().Unix()
