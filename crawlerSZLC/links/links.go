@@ -459,9 +459,9 @@ func (l *Links) CrawlerSZLC(urls []string) error {
 			case <-time.After(time.Second * time.Duration(dur)):
 			}
 		}
-		<-done
 
 		cancel()
+		<-done
 
 	}
 
