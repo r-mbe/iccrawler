@@ -385,6 +385,14 @@ func (l *Links) ListURLS(urls []string, out chan<- string) error {
 
 	for i, url := range urls {
 		fmt.Printf("XXXX first i=%d url=%s", i, url)
+
+		//debug
+
+		if i > 3 {
+			fmt.Println("##### debug Mode only crawler 5 and test loop.", i)
+			break
+		}
+
 		if len(url) > 0 {
 			out <- url
 		}
@@ -427,9 +435,14 @@ func (l *Links) CrawlerSZLC(urls []string) error {
 		fmt.Println("Looping......................time once, Your turn.", i, begin)
 		l.ListURLS(urls, list)
 
+		// dur := time.Since(begin).Seconds()
+		//debug
 		dur := time.Since(begin).Seconds()
 		//each day
-		if dur < 86400 {
+		// if dur < 86400 {
+		fmt.Println("LOOOPingg.. finish once list time,  dur", time.Now(), dur)
+
+		if dur < 120 {
 			select {
 			case <-time.After(time.Second * time.Duration(dur)):
 			}
