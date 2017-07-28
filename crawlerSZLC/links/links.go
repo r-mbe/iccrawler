@@ -238,23 +238,30 @@ func (l *Links) StorageCockDB(ctx context.Context, in <-chan interface{}, done c
 		case <-ctx.Done():
 			return
 
-		case v, _ := <-in:
-			//do resualt.\
-			fmt.Println("XXXXOOOOO##### len(queue) storage channel==", len(queue))
-			if len(queue) == 150 {
-				//save to db
-				fmt.Println(">>>>>>>>>>>>>>>>>>>>500000 ##### len(queue) storage channel==", len(queue))
+		case v, ok := <-in:
+			if ok {
+				//do resualt.\
+				fmt.Println("XXXXOOOOO##### len(queue) storage channel==", len(queue))
+				if len(queue) == 150 {
+					//save to db
+					fmt.Println(">>>>>>>>>>>>>>>>>>>>500000 ##### len(queue) storage channel==", len(queue))
 
-				for _, item := range queue {
-					l.DoCockStorage(item)
+					for _, item := range queue {
+						l.DoCockStorage(item)
+					}
+					queue = nil
+					fmt.Println("XXXXOOOOO##### after Nil len(queue)  channel==", len(queue))
+
+				} else {
+					queue = append(queue, v)
 				}
-				queue = nil
-				fmt.Println("XXXXOOOOO##### after Nil len(queue)  channel==", len(queue))
-
 			} else {
-				queue = append(queue, v)
+				//finish.
+				fmt.Println("finish storage cockroach db")
+				done <- struct{}{}
 			}
-		case <-time.After(time.Second * 3600):
+
+		case <-time.After(time.Second * 300):
 			for _, item := range queue {
 				l.DoCockStorage(item)
 			}
@@ -415,7 +422,8 @@ func (l *Links) CrawlerSZLC(urls []string) error {
 	pages := make(chan string)
 	storages := make(chan interface{}, 5000)
 
-	done := make(chan struct{})
+	corrency := 100
+	done := make(chan struct{}, corrency)
 
 	ctx, cancel := context.WithCancel(context.Background())
 	//input, out-chan, out-chan
@@ -434,7 +442,7 @@ func (l *Links) CrawlerSZLC(urls []string) error {
 
 	defer close(done)
 
-	for i := 0; i < 100; i++ {
+	for i := 0; i < corrency; i++ {
 		begin := time.Now()
 		fmt.Println("Looping......................time once, Your turn.", i, begin)
 		l.ListURLS(urls, list)
@@ -451,12 +459,10 @@ func (l *Links) CrawlerSZLC(urls []string) error {
 			case <-time.After(time.Second * time.Duration(dur)):
 			}
 		}
-
+		<-done
 	}
 
 	//wait all finished.
-
-	<-done
 
 	defer cancel()
 
