@@ -202,7 +202,14 @@ func convertReqToCock(in request.PartNumber, o *CockPartNumber) error {
 		}
 	}
 
-	o.LUptime = time.Now()
+	//set timezone = server local setting. china time.
+	local, err := time.LoadLocation("local")
+	if err != nil {
+		fmt.Println("tim.loadLocation error", err)
+	}
+
+	now := time.Now()
+	o.LUptime = now.In(local)
 	return nil
 }
 
