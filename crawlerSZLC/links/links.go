@@ -254,7 +254,7 @@ func (l *Links) StorageCockDB(ctx context.Context, in <-chan interface{}, done c
 			} else {
 				queue = append(queue, v)
 			}
-		case <-time.After(time.Second * 300):
+		case <-time.After(time.Second * 3600):
 			for _, item := range queue {
 				l.DoCockStorage(item)
 			}

@@ -203,7 +203,7 @@ func convertReqToCock(in request.PartNumber, o *CockPartNumber) error {
 	}
 
 	//set timezone = server local setting. china time.
-	local, err := time.LoadLocation("local")
+	local, err := time.LoadLocation("Asia/Shanghai")
 	if err != nil {
 		fmt.Println("tim.loadLocation error", err)
 	}
@@ -229,6 +229,7 @@ func (c *Client) DoSave(p request.PartNumber) error {
 	// 	return errors.New("dat had already exist.")
 	// }
 
+	fmt.Println("<<<>>> now will sav to cockroach", pt)
 	c.DB.Create(&pt)
 
 	//update
