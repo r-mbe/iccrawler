@@ -237,10 +237,11 @@ func (l *Links) StorageCockDB(ctx context.Context, in <-chan interface{}, done c
 		select {
 		case <-ctx.Done():
 			return
+
 		case v, _ := <-in:
 			//do resualt.\
 			fmt.Println("XXXXOOOOO##### len(queue) storage channel==", len(queue))
-			if len(queue) == 1000 {
+			if len(queue) == 150 {
 				//save to db
 				fmt.Println(">>>>>>>>>>>>>>>>>>>>500000 ##### len(queue) storage channel==", len(queue))
 
@@ -253,7 +254,10 @@ func (l *Links) StorageCockDB(ctx context.Context, in <-chan interface{}, done c
 			} else {
 				queue = append(queue, v)
 			}
-
+		case <-time.After(time.Second * 300):
+			for _, item := range queue {
+				l.DoCockStorage(item)
+			}
 		}
 	}
 }

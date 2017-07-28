@@ -10,4 +10,7 @@ go build -o  go-crawler-szlc crawler.go
 # nohup  nohuprooll.sh  2>%1  |  ./logger  go-crawler-szlc  &
 
 
-nohup ./go-crawler-szlc >/dev/null 2>&1 &
+# nohup ./go-crawler-szlc >/dev/null 2>&1 &
+
+
+nohup ./go-crawler-szlc &
