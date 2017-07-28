@@ -422,8 +422,8 @@ func (l *Links) CrawlerSZLC(urls []string) error {
 	defer close(done)
 
 	for i := 0; i < 100; i++ {
-		fmt.Println("Looping......................time once, Your turn.", i)
 		begin := time.Now()
+		fmt.Println("Looping......................time once, Your turn.", i, begin)
 		l.ListURLS(urls, list)
 
 		dur := time.Since(begin).Seconds()
