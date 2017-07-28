@@ -209,7 +209,9 @@ func convertReqToCock(in request.PartNumber, o *CockPartNumber) error {
 	}
 
 	now := time.Now()
+	fmt.Println("get localtimXXXe",n now)
 	o.LUptime = now.In(local)
+
 	return nil
 }
 
