@@ -423,9 +423,7 @@ func (l *Links) CrawlerSZLC(urls []string) error {
 	storages := make(chan interface{}, 5000)
 
 	corrency := 100
-	done := make(chan struct{}, corrency)
 
-	ctx, cancel := context.WithCancel(context.Background())
 	//input, out-chan, out-chan
 
 	go l.detailURLS(pages, list)
@@ -434,15 +432,17 @@ func (l *Links) CrawlerSZLC(urls []string) error {
 	//storage to csv
 	// go l.Storages(storages, done)
 
-	go l.StorageCockDB(ctx, storages, done)
-
-	defer close(storages)
 	defer l.l.Close()
 	defer close(list)
 
-	defer close(done)
-
 	for i := 0; i < corrency; i++ {
+		done := make(chan struct{})
+		defer close(done)
+
+		ctx, cancel := context.WithCancel(context.Background())
+		go l.StorageCockDB(ctx, storages, done)
+		defer close(storages)
+
 		begin := time.Now()
 		fmt.Println("Looping......................time once, Your turn.", i, begin)
 		l.ListURLS(urls, list)
@@ -460,11 +460,12 @@ func (l *Links) CrawlerSZLC(urls []string) error {
 			}
 		}
 		<-done
+
+		cancel()
+
 	}
 
 	//wait all finished.
-
-	defer cancel()
 
 	end := time.Now().Unix()
 	fmt.Printf("All Done:  spend - time %d\n", end-start)
