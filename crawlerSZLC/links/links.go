@@ -51,7 +51,8 @@ func (l *Links) init() {
 	l.Wg = new(sync.WaitGroup)
 
 	//cuckoofilter size = 5000w  bucket slot size = 4
-	l.cf = cuckoofilter.NewCuckooFilter(50000000)
+	// l.cf = cuckoofilter.NewCuckooFilter(50000000)
+	l.cf = cuckoofilter.NewCuckooFilter(50)
 	// l.c = ocsv.NewOcsv()
 	// err := l.c.Init()
 	// if err != nil {
