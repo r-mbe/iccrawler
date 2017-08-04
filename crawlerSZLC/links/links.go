@@ -38,12 +38,6 @@ func NewLinks() *Links {
 	return ret
 }
 
-//Close release
-func (l *Links) Close() {
-	// defer l.c.Close()
-	defer l.cock.Close()
-}
-
 func (l *Links) init() {
 	// Initialize the internal hosts map
 	// c.hosts = make(map[string]struct{}, len(ctxs))
@@ -229,70 +223,75 @@ func (l *Links) DoCockStorage(d interface{}) error {
 }
 
 //StorageCockDB channel one the last channel close done channal for singal all channal done
-func (l *Links) StorageCockDB(ctx context.Context, in <-chan interface{}, done chan<- struct{}) {
+func (l *Links) StorageCockDB(ctx context.Context, in <-chan interface{}) {
 	//consurmer
+	go func(ctx context.Context) {
+		select {
+		case <-ctx.Done():
+			fmt.Println("StoragecockDB finish cancel.")
+			return
+		}
+	}(ctx)
+
 	queue := []interface{}{}
 
 	for {
 		select {
 		case <-ctx.Done():
 			return
+		case v := <-in:
+			fmt.Println("XXXXOOOOO##### len(queue) storage channel==", len(queue))
+			if len(queue) >= 10 {
+				//save to db
+				fmt.Println(">>>>>>>>>>>>>>>>>>>>500000 ##### len(queue) storage channel==", len(queue))
 
-		case v, ok := <-in:
-			if ok {
-				//do resualt.\
-				fmt.Println("XXXXOOOOO##### len(queue) storage channel==", len(queue))
-				if len(queue) == 150 {
-					//save to db
-					fmt.Println(">>>>>>>>>>>>>>>>>>>>500000 ##### len(queue) storage channel==", len(queue))
-
-					for _, item := range queue {
-						l.DoCockStorage(item)
-					}
-					queue = nil
-					fmt.Println("XXXXOOOOO##### after Nil len(queue)  channel==", len(queue))
-
-				} else {
-					queue = append(queue, v)
+				for _, item := range queue {
+					l.DoCockStorage(item)
 				}
-			} else {
-				//finish.
-				fmt.Println("finish storage cockroach db")
-				done <- struct{}{}
-			}
+				queue = nil
+				fmt.Println("XXXXOOOOO##### after Nil len(queue)  channel==", len(queue))
 
-		case <-time.After(time.Second * 600):
-			for _, item := range queue {
-				l.DoCockStorage(item)
+			} else {
+				queue = append(queue, v)
 			}
 		}
 	}
 }
 
 //Storages channel one the last channel close done channal for singal all channal done
-func (l *Links) Storages(in <-chan interface{}, done chan<- struct{}) {
-	//consurmer
-	for {
-		select {
-		case v, ok := <-in:
-			//do resualt.\
-			if ok {
-				fmt.Printf("receive  one chan storage %v.....", v)
-				l.convertAndSave(v)
-			} else {
-				fmt.Println("recieve all chan storage....")
-				return
-			}
-		}
-	}
-}
+// func (l *Links) Storages(in <-chan interface{}, done chan<- struct{}) {
+// 	//consurmer
+// 	for {
+// 		select {
+// 		case v, ok := <-in:
+// 			//do resualt.\
+// 			if ok {
+// 				fmt.Printf("receive  one chan storage %v.....", v)
+// 				l.convertAndSave(v)
+// 			} else {
+// 				fmt.Println("recieve all chan storage....")
+// 				return
+// 			}
+// 		}
+// 	}
+// }
 
-//ListPage out channel for list page. first output channel
-func (l *Links) detailPage(out chan<- interface{}, in <-chan string) {
+//DetailPage out channel for list page. first output channel
+func (l *Links) DetailPage(ctx context.Context, out chan<- interface{}, in <-chan string) {
 	//consurmer
+	go func(ctx context.Context) {
+		select {
+		case <-ctx.Done():
+			fmt.Println("DetailPage list finished.")
+			return
+		}
+	}(ctx)
+
 	defer close(out)
 	for {
 		select {
+		case <-ctx.Done():
+			return
 		case page, ok := <-in:
 			//do resualt.\
 			if ok {
@@ -345,12 +344,22 @@ func (l *Links) CrawlerCatListFromNode(url string) ([]string, error) {
 	return res, nil
 }
 
-//ListPage out channel for list page. first output channel
-func (l *Links) detailURLS(out chan<- string, in <-chan string) {
+//DetailURLS out channel for list page. first output channel
+func (l *Links) DetailURLS(ctx context.Context, out chan<- string, in <-chan string) {
 	//consurmer
+	go func(ctx context.Context) {
+		select {
+		case <-ctx.Done():
+			fmt.Println("DetailURLS list finished.")
+			return
+		}
+	}(ctx)
+
 	defer close(out)
 	for {
 		select {
+		case <-ctx.Done():
+			return
 		case href, ok := <-in:
 			//do resualt.\
 			if ok {
@@ -392,7 +401,15 @@ func (l *Links) detailURLS(out chan<- string, in <-chan string) {
 }
 
 //ListURLS out channel for list page. first output channel
-func (l *Links) ListURLS(urls []string, out chan<- string) error {
+func (l *Links) ListURLS(ctx context.Context, urls []string, out chan<- string) error {
+
+	go func(ctx context.Context) {
+		select {
+		case <-ctx.Done():
+			fmt.Println("Send list finished.")
+			return
+		}
+	}(ctx)
 
 	for i, url := range urls {
 		fmt.Printf("XXXX first i=%d url=%s", i, url)
@@ -408,57 +425,18 @@ func (l *Links) ListURLS(urls []string, out chan<- string) error {
   urls root seeds.
   out chan  put real per ic url into out channal
 */
-func (l *Links) CrawlerSZLC(urls []string) error {
+func (l *Links) CrawlerSZLC(ctx context.Context, urls []string, out chan<- string) error {
 	start := time.Now().Unix()
 
-	list := make(chan string)
-	pages := make(chan string)
-	storages := make(chan interface{}, 5000)
+	l.ListURLS(ctx, urls, out)
 
-	corrency := 100
-
-	//input, out-chan, out-chan
-
-	go l.detailURLS(pages, list)
-	go l.detailPage(storages, pages)
-
-	//storage to csv
-	// go l.Storages(storages, done)
-
-	defer l.l.Close()
-	defer close(list)
-
-	done := make(chan struct{})
-	ctx, cancel := context.WithCancel(context.Background())
-	go l.StorageCockDB(ctx, storages, done)
-	defer close(storages)
-	defer close(done)
-
-	for i := 0; i < corrency; i++ {
-
-		begin := time.Now()
-		fmt.Println("Looping......................time once, Your turn.", i, begin)
-		l.ListURLS(urls, list)
-
-		// dur := time.Since(begin).Seconds()
-		//debug
-		dur := time.Since(begin).Seconds()
-		//each day
-		// if dur < 86400 {
-		fmt.Println("LOOOPingg.. finish once list time,  dur", time.Now(), dur)
-
-		if dur < 86400 {
-			select {
-			case <-time.After(86400.0 - time.Second*time.Duration(dur)):
-			}
-		}
-	}
-
-	<-done
-	cancel()
 	//wait all finished.
-
 	end := time.Now().Unix()
-	fmt.Printf("All Done:  spend - time %d\n", end-start)
+	fmt.Printf("Once All sended.:  spend - time %d\n", end-start)
 	return nil
+}
+
+func (l *Links) Stop() {
+	defer l.l.Close()
+	defer l.cock.Close()
 }
