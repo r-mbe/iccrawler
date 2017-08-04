@@ -66,7 +66,7 @@ func main() {
 		go l.DetailPage(ctx2, Storages, Pages)
 		go l.StorageCockDB(ctx2, Storages)
 
-		durS := 2*dur - 10
+		durS := 2*dur - 4
 		ctx, cancel := context.WithTimeout(context.Background(), time.Duration(durS)*time.Second)
 		select {
 		case <-stop:

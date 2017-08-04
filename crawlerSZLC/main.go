@@ -12,14 +12,6 @@ import (
 
 func worker(ctx context.Context, l *links.Links, seeds []string, out chan<- string) error {
 
-	go func(ctx context.Context) {
-		select {
-		case <-ctx.Done():
-			fmt.Println("one day finished.")
-			return
-		}
-	}(ctx)
-
 	//real task worker very long time need be cancel up code.
 	fmt.Println("### Default do work worker## ", time.Now())
 
@@ -31,13 +23,11 @@ func worker(ctx context.Context, l *links.Links, seeds []string, out chan<- stri
 	}
 
 	///////////block worker until finish or canceled.
-	tick := time.NewTicker(180 * time.Hour)
 	select {
-	case <-tick.C:
-		fmt.Println("too long time")
+	case <-ctx.Done():
+		fmt.Println("one day finished.")
+		return nil
 	}
-
-	return err
 
 }
 
@@ -70,14 +60,13 @@ func main() {
 
 		List := make(chan string)
 		Pages := make(chan string)
-		Storages := make(chan interface{}, 5000)
-		done := make(chan struct{})
+		Storages := make(chan interface{})
 
 		go l.DetailURLS(ctx2, Pages, List)
 		go l.DetailPage(ctx2, Storages, Pages)
-		go l.StorageCockDB(ctx2, Storages, done)
+		go l.StorageCockDB(ctx2, Storages)
 
-		durS := 2*dur - 1
+		durS := 2*dur - 4
 		ctx, cancel := context.WithTimeout(context.Background(), time.Duration(durS)*time.Hour)
 		select {
 		case <-stop:
@@ -86,7 +75,6 @@ func main() {
 			cancel2()
 
 			//wait for storage finish
-			<-done
 			close(Storages)
 
 			cancel()
