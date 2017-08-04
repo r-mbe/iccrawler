@@ -225,19 +225,13 @@ func (l *Links) DoCockStorage(d interface{}) error {
 //StorageCockDB channel one the last channel close done channal for singal all channal done
 func (l *Links) StorageCockDB(ctx context.Context, in <-chan interface{}) {
 	//consurmer
-	go func(ctx context.Context) {
-		select {
-		case <-ctx.Done():
-			fmt.Println("StoragecockDB finish cancel.")
-			return
-		}
-	}(ctx)
 
 	queue := []interface{}{}
 
 	for {
 		select {
 		case <-ctx.Done():
+			fmt.Println("StorageCockDB list finished.")
 			return
 		case v := <-in:
 			fmt.Println("XXXXOOOOO##### len(queue) storage channel==", len(queue))
@@ -279,18 +273,12 @@ func (l *Links) StorageCockDB(ctx context.Context, in <-chan interface{}) {
 //DetailPage out channel for list page. first output channel
 func (l *Links) DetailPage(ctx context.Context, out chan<- interface{}, in <-chan string) {
 	//consurmer
-	go func(ctx context.Context) {
-		select {
-		case <-ctx.Done():
-			fmt.Println("DetailPage list finished.")
-			return
-		}
-	}(ctx)
 
 	defer close(out)
 	for {
 		select {
 		case <-ctx.Done():
+			fmt.Println("DetailPage list finished.")
 			return
 		case page, ok := <-in:
 			//do resualt.\
@@ -347,18 +335,12 @@ func (l *Links) CrawlerCatListFromNode(url string) ([]string, error) {
 //DetailURLS out channel for list page. first output channel
 func (l *Links) DetailURLS(ctx context.Context, out chan<- string, in <-chan string) {
 	//consurmer
-	go func(ctx context.Context) {
-		select {
-		case <-ctx.Done():
-			fmt.Println("DetailURLS list finished.")
-			return
-		}
-	}(ctx)
 
 	defer close(out)
 	for {
 		select {
 		case <-ctx.Done():
+			fmt.Println("DetailURLS list finished.")
 			return
 		case href, ok := <-in:
 			//do resualt.\
