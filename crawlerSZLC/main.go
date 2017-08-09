@@ -66,9 +66,14 @@ func main() {
 		go l.DetailPage(ctx2, Storages, Pages)
 		go l.StorageCockDB(ctx2, Storages)
 
-		durS := 2*dur - 4
+		//durS := 2*dur - 4
+
+		durS := 20
 		ctx, cancel := context.WithTimeout(context.Background(), time.Duration(durS)*time.Hour)
+
+		worker(ctx, l, seeds, List)
 		select {
+
 		case <-stop:
 			fmt.Println("all done.")
 			//close
@@ -79,8 +84,10 @@ func main() {
 
 			cancel()
 			return
+		case <-time.After(time.Hour * 24):
+			continue
+
 		case <-tick.C:
-			go worker(ctx, l, seeds, List)
 		}
 	}
 

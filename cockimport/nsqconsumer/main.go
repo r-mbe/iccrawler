@@ -16,18 +16,18 @@ import (
 
 	// Import GORM-related packages.
 	"github.com/jinzhu/gorm"
-	_ "github.com/jinzhu/gorm/dialects/postgres"
+	_ "github.com/jinzhu/gorm/dialects/mysql"
 )
 
 var (
 	done chan bool
 	//test
-	// nsqaddr = "10.8.15.9:4161"
-	// isDebug = true
+	nsqaddr = "10.8.15.9:4161"
+	isDebug = true
 
 	//product
-	nsqaddr = "10.8.51.50:4161"
-	isDebug = false
+	// nsqaddr = "10.8.51.50:4161"
+	// isDebug = false
 )
 var total uint64
 var begin time.Time
@@ -75,6 +75,11 @@ type TProSellPrice struct {
 	LastUpTime int64     `gorm:"column:last_update_time"`
 	OpAdminID  int64     `gorm:"column:op_admin_id"`
 	LUptime    time.Time `gorm:"column:luptime"`
+}
+
+//TProSellPrice tablename
+func (TProSellPrice) TableName() string {
+	return "t_pro_sell_szlcsc"
 }
 
 //Handle h

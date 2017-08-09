@@ -51,7 +51,7 @@ var begin time.Time
 var total uint64
 
 var (
-	isDebug = false
+	isDebug = true
 )
 
 type Payload struct {
