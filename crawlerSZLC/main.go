@@ -71,7 +71,8 @@ func main() {
 		durS := 20
 		ctx, cancel := context.WithTimeout(context.Background(), time.Duration(durS)*time.Hour)
 
-		worker(ctx, l, seeds, List)
+		go worker(ctx, l, seeds, List)
+
 		select {
 
 		case <-stop:
@@ -84,10 +85,8 @@ func main() {
 
 			cancel()
 			return
-		case <-time.After(time.Hour * 24):
-			continue
-
 		case <-tick.C:
+			fmt.Println("after 24Hours again.")
 		}
 	}
 
