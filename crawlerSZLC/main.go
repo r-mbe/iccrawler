@@ -51,18 +51,19 @@ func main() {
 	fmt.Println("seeds len=", len(seeds))
 	// done := make(chan struct{})
 
-	List := make(chan string)
-	Pages := make(chan string)
-	Storages := make(chan interface{})
-
-	//durS := 2*dur - 4
 	ctx2, cancel2 := context.WithTimeout(context.Background(), (24 * 365 * time.Hour))
-
-	go l.DetailURLS(ctx2, Pages, List)
-	go l.DetailPage(ctx2, Storages, Pages)
-	go l.StorageCockDB(ctx2, Storages)
-
+	defer cancel2()
 	for {
+
+		List := make(chan string)
+		Pages := make(chan string)
+		Storages := make(chan interface{})
+
+		//durS := 2*dur - 4
+
+		go l.DetailURLS(ctx2, Pages, List)
+		go l.DetailPage(ctx2, Storages, Pages)
+		go l.StorageCockDB(ctx2, Storages)
 
 		ctx, cancel := context.WithTimeout(context.Background(), (20 * time.Second))
 		defer cancel()
@@ -75,7 +76,6 @@ func main() {
 		case <-ctx2.Done():
 			fmt.Println("## all done.")
 			//close
-			cancel2()
 			//wait for storage finish
 			close(Storages)
 
@@ -87,6 +87,10 @@ func main() {
 			fmt.Println("##############>>>> after 24Hours again.")
 			fmt.Println("##############>>>> after 24Hours again.")
 			fmt.Println("##############>>>> after 24Hours again.")
+
+			close(List)
+			close(Storages)
+			close(Pages)
 			continue
 
 		}

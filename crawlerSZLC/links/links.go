@@ -410,6 +410,14 @@ func (l *Links) ListURLS(ctx context.Context, urls []string, out chan<- string) 
 func (l *Links) CrawlerSZLC(ctx context.Context, urls []string, out chan<- string) error {
 	start := time.Now().Unix()
 
+	go func(ctx context.Context) {
+		select {
+		case <-ctx.Done():
+			fmt.Println("CrawlerSZLC list finished.")
+			return
+		}
+	}(ctx)
+
 	l.ListURLS(ctx, urls, out)
 
 	//wait all finished.
