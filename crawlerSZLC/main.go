@@ -65,10 +65,10 @@ func main() {
 		go l.DetailPage(ctx2, Storages, Pages)
 		go l.StorageCockDB(ctx2, Storages)
 
-		ctx, cancel := context.WithTimeout(context.Background(), (20 * time.Second))
+		ctx, cancel := context.WithTimeout(context.Background(), (20 * time.Hour))
 		defer cancel()
 
-		timer := time.NewTimer(time.Minute * 10)
+		timer := time.NewTimer(time.Hour * 24)
 		defer timer.Stop()
 
 		go worker(ctx, l, seeds, List)
