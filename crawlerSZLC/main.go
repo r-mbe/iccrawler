@@ -58,23 +58,26 @@ func main() {
 	Pages := make(chan string)
 	Storages := make(chan interface{})
 
+	//durS := 2*dur - 4
+	ctx2, cancel2 := context.WithTimeout(context.Background(), (24 * 365 * time.Hour))
+
+	go l.DetailURLS(ctx2, Pages, List)
+	go l.DetailPage(ctx2, Storages, Pages)
+	go l.StorageCockDB(ctx2, Storages)
+
 	for {
 
-		durS := 20
-		ctx, cancel := context.WithTimeout(context.Background(), time.Duration(durS)*time.Hour)
-		go l.DetailURLS(ctx, Pages, List)
-		go l.DetailPage(ctx, Storages, Pages)
-		go l.StorageCockDB(ctx, Storages)
-
-		//durS := 2*dur - 4
+		ctx, cancel := context.WithTimeout(context.Background(), (20 * time.Hour))
 
 		go worker(ctx, l, seeds, List)
 
 		select {
 
 		case <-stop:
-			fmt.Println("all done.")
+			fmt.Println("## all done.")
 			//close
+
+			cancel2()
 
 			//wait for storage finish
 			close(Storages)
@@ -82,7 +85,12 @@ func main() {
 			cancel()
 			return
 		case <-tick.C:
-			fmt.Println("after 24Hours again.")
+			fmt.Println("##############>>>> after 24Hours again.")
+			fmt.Println("##############>>>> after 24Hours again.")
+			fmt.Println("##############>>>> after 24Hours again.")
+			fmt.Println("##############>>>> after 24Hours again.")
+			fmt.Println("##############>>>> after 24Hours again.")
+			fmt.Println("##############>>>> after 24Hours again.")
 		}
 	}
 
