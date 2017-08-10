@@ -54,22 +54,19 @@ func main() {
 	fmt.Println("seeds len=", len(seeds))
 	// done := make(chan struct{})
 
+	List := make(chan string)
+	Pages := make(chan string)
+	Storages := make(chan interface{})
+
 	for {
-
-		ctx2, cancel2 := context.WithCancel(context.Background())
-
-		List := make(chan string)
-		Pages := make(chan string)
-		Storages := make(chan interface{})
-
-		go l.DetailURLS(ctx2, Pages, List)
-		go l.DetailPage(ctx2, Storages, Pages)
-		go l.StorageCockDB(ctx2, Storages)
-
-		//durS := 2*dur - 4
 
 		durS := 20
 		ctx, cancel := context.WithTimeout(context.Background(), time.Duration(durS)*time.Hour)
+		go l.DetailURLS(ctx, Pages, List)
+		go l.DetailPage(ctx, Storages, Pages)
+		go l.StorageCockDB(ctx, Storages)
+
+		//durS := 2*dur - 4
 
 		go worker(ctx, l, seeds, List)
 
@@ -78,7 +75,6 @@ func main() {
 		case <-stop:
 			fmt.Println("all done.")
 			//close
-			cancel2()
 
 			//wait for storage finish
 			close(Storages)
