@@ -68,7 +68,7 @@ func main() {
 		ctx, cancel := context.WithTimeout(context.Background(), (20 * time.Second))
 		defer cancel()
 
-		timer := time.NewTimer(time.Minute * 5)
+		timer := time.NewTimer(time.Minute * 10)
 		defer timer.Stop()
 
 		go worker(ctx, l, seeds, List)
