@@ -34,12 +34,9 @@ func worker(ctx context.Context, l *links.Links, seeds []string, out chan<- stri
 func main() {
 
 	//ten years.
-	stop := time.After(3650 * 24 * time.Hour)
 
-	dur := 24
 	//tick for one day run once worker
-	tick := time.NewTicker(time.Duration(dur) * time.Hour)
-	defer tick.Stop()
+	// tick := time.NewTicker(time.Duration(dur) * time.Hour)
 
 	////////////////////////////////start/////////////
 	l := links.NewLinks()
@@ -65,33 +62,35 @@ func main() {
 	go l.DetailPage(ctx2, Storages, Pages)
 	go l.StorageCockDB(ctx2, Storages)
 
+	ticker := time.NewTicker(24 * time.Hour)
+	defer ticker.Stop()
+
 	for {
 
-		ctx, cancel := context.WithTimeout(context.Background(), (20 * time.Hour))
-
-		go worker(ctx, l, seeds, List)
-
 		select {
-
-		case <-stop:
+		case <-ctx2.Done():
 			fmt.Println("## all done.")
 			//close
-
 			cancel2()
-
 			//wait for storage finish
 			close(Storages)
 
-			cancel()
 			return
-		case <-tick.C:
+		case <-ticker.C:
 			fmt.Println("##############>>>> after 24Hours again.")
 			fmt.Println("##############>>>> after 24Hours again.")
 			fmt.Println("##############>>>> after 24Hours again.")
 			fmt.Println("##############>>>> after 24Hours again.")
 			fmt.Println("##############>>>> after 24Hours again.")
 			fmt.Println("##############>>>> after 24Hours again.")
+
+		default:
+			ctx, cancel := context.WithTimeout(context.Background(), (20 * time.Hour))
+			worker(ctx, l, seeds, List)
+			cancel()
+
 		}
+
 	}
 
 }
