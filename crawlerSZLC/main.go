@@ -62,11 +62,15 @@ func main() {
 	go l.DetailPage(ctx2, Storages, Pages)
 	go l.StorageCockDB(ctx2, Storages)
 
-	ticker := time.NewTicker(15 * time.Minute)
-	defer ticker.Stop()
-
 	for {
 
+		ctx, cancel := context.WithTimeout(context.Background(), (20 * time.Second))
+		defer cancel()
+
+		timer := time.NewTimer(time.Minute * 5)
+		defer timer.Stop()
+
+		go worker(ctx, l, seeds, List)
 		select {
 		case <-ctx2.Done():
 			fmt.Println("## all done.")
@@ -76,18 +80,14 @@ func main() {
 			close(Storages)
 
 			return
-		case <-ticker.C:
+		case <-timer.C:
 			fmt.Println("##############>>>> after 24Hours again.")
 			fmt.Println("##############>>>> after 24Hours again.")
 			fmt.Println("##############>>>> after 24Hours again.")
 			fmt.Println("##############>>>> after 24Hours again.")
 			fmt.Println("##############>>>> after 24Hours again.")
 			fmt.Println("##############>>>> after 24Hours again.")
-
-		default:
-			ctx, cancel := context.WithTimeout(context.Background(), (5 * time.Minute))
-			worker(ctx, l, seeds, List)
-			cancel()
+			continue
 
 		}
 
