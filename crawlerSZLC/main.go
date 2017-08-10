@@ -62,7 +62,7 @@ func main() {
 	go l.DetailPage(ctx2, Storages, Pages)
 	go l.StorageCockDB(ctx2, Storages)
 
-	ticker := time.NewTicker(24 * time.Hour)
+	ticker := time.NewTicker(15 * time.Minute)
 	defer ticker.Stop()
 
 	for {
@@ -85,7 +85,7 @@ func main() {
 			fmt.Println("##############>>>> after 24Hours again.")
 
 		default:
-			ctx, cancel := context.WithTimeout(context.Background(), (20 * time.Hour))
+			ctx, cancel := context.WithTimeout(context.Background(), (5 * time.Minute))
 			worker(ctx, l, seeds, List)
 			cancel()
 
