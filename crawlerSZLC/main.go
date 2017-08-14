@@ -22,7 +22,7 @@ func worker(l *links.Links, seeds []string) {
 	Pages := make(chan string)
 	Storages := make(chan interface{})
 
-	defer close(Pages)
+	// defer close(Pages)
 	defer close(Storages)
 
 	// ctx, cancel := context.WithCancel(context.Background())
