@@ -57,6 +57,10 @@ func main() {
 	stop := time.After(6 * 4 * time.Minute)
 	tick := time.NewTicker(6 * time.Minute)
 	defer tick.Stop()
+
+	//first time
+	worker(l, seeds)
+
 	for {
 		select {
 		case <-tick.C:
