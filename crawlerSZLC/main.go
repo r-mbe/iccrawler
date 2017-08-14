@@ -23,7 +23,7 @@ func worker(l *links.Links, seeds []string) {
 	Storages := make(chan interface{})
 
 	// defer close(Pages)
-	defer close(Storages)
+	// defer close(Storages)
 
 	// ctx, cancel := context.WithCancel(context.Background())
 
@@ -33,6 +33,7 @@ func worker(l *links.Links, seeds []string) {
 	go l.DetailPage(ctx, Storages, Pages)
 
 	l.StorageCockDB(ctx, Storages)
+	close(Storages)
 
 	elapsed := time.Since(start)
 	fmt.Println("Looping...working End End......... All storaged finish consumming save to db...  It took: ", elapsed)
