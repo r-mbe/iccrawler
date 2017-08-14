@@ -341,6 +341,8 @@ func (l *Links) CrawlerCatListFromNode(url string) ([]string, error) {
 func (l *Links) DetailURLS(ctx context.Context, out chan<- string, in <-chan string) {
 	//consurmer
 
+	defer close(out)
+
 	for {
 		select {
 		case <-ctx.Done():
