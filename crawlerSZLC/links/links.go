@@ -280,7 +280,6 @@ func (l *Links) StorageCockDB(ctx context.Context, in <-chan interface{}) {
 func (l *Links) DetailPage(ctx context.Context, out chan<- interface{}, in <-chan string) {
 	//consurmer
 
-	defer close(out)
 	for {
 		select {
 		case <-ctx.Done():
@@ -341,7 +340,6 @@ func (l *Links) CrawlerCatListFromNode(url string) ([]string, error) {
 //DetailURLS out channel for list page. first output channel
 func (l *Links) DetailURLS(ctx context.Context, out chan<- string, in <-chan string) {
 	//consurmer
-	defer close(out)
 
 	for {
 		select {
