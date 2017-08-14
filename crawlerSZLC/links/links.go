@@ -6,7 +6,6 @@ import (
 	"fmt"
 	"log"
 	"sync"
-	"time"
 
 	"github.com/seiflotfy/cuckoofilter"
 	"github.com/stanxii/iccrawler/crawlerSZLC/cockroach"
@@ -233,21 +232,28 @@ func (l *Links) StorageCockDB(ctx context.Context, in <-chan interface{}) {
 		case <-ctx.Done():
 			fmt.Println("StorageCockDB list finished.")
 			return
-		case v := <-in:
-			fmt.Println("XXXXOOOOO##### len(queue) storage channel==", len(queue))
-			if len(queue) >= 10 {
-				//save to db
-				fmt.Println(">>>>>>>>>>>>>>>>>>>>500000 ##### len(queue) storage channel==", len(queue))
+		case v, ok := <-in:
+			if ok {
+				fmt.Println("XXXXOOOOO##### len(queue) storage channel==", len(queue))
+				if len(queue) >= 10 {
+					//save to db
+					fmt.Println(">>>>>>>>>>>>>>>>>>>>500000 ##### len(queue) storage channel==", len(queue))
 
-				for _, item := range queue {
-					l.DoCockStorage(item)
+					for _, item := range queue {
+						l.DoCockStorage(item)
+					}
+					queue = nil
+					fmt.Println("XXXXOOOOO##### after Nil len(queue)  channel==", len(queue))
+
+				} else {
+					queue = append(queue, v)
 				}
-				queue = nil
-				fmt.Println("XXXXOOOOO##### after Nil len(queue)  channel==", len(queue))
-
 			} else {
-				queue = append(queue, v)
+				// channel is empty all finished.
+				fmt.Println("all storage done. in StorageCockDB .")
+				return
 			}
+
 		}
 	}
 }
@@ -383,47 +389,22 @@ func (l *Links) DetailURLS(ctx context.Context, out chan<- string, in <-chan str
 }
 
 //ListURLS out channel for list page. first output channel
-func (l *Links) ListURLS(ctx context.Context, urls []string, out chan<- string) error {
+func (l *Links) ListURLS(ctx context.Context, urls []string) <-chan string {
 
-	go func(ctx context.Context) {
-		select {
-		case <-ctx.Done():
-			fmt.Println("Send list finished.")
-			return
+	dst := make(chan string)
+	n := 1
+	go func(ctx context.Context, urls []string) {
+		for _, url := range urls {
+			select {
+			case <-ctx.Done():
+				return //returning not to leak the goroutine.
+			case dst <- string(url):
+				n++
+			}
 		}
-	}(ctx)
+	}(ctx, urls)
 
-	for i, url := range urls {
-		fmt.Printf("XXXX first i=%d url=%s", i, url)
-
-		if len(url) > 0 {
-			out <- url
-		}
-	}
-	return nil
-}
-
-/*CrawlerSZLC  crawler list links from root seed []string  array.
-  urls root seeds.
-  out chan  put real per ic url into out channal
-*/
-func (l *Links) CrawlerSZLC(ctx context.Context, urls []string, out chan<- string) error {
-	start := time.Now().Unix()
-
-	go func(ctx context.Context) {
-		select {
-		case <-ctx.Done():
-			fmt.Println("CrawlerSZLC list finished.")
-			return
-		}
-	}(ctx)
-
-	l.ListURLS(ctx, urls, out)
-
-	//wait all finished.
-	end := time.Now().Unix()
-	fmt.Printf("Once All sended.:  spend - time %d\n", end-start)
-	return nil
+	return dst
 }
 
 func (l *Links) Stop() {

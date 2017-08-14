@@ -10,35 +10,38 @@ import (
 	"github.com/stanxii/iccrawler/crawlerSZLC/links"
 )
 
-func worker(ctx context.Context, l *links.Links, seeds []string, out chan<- string) error {
+func worker(l *links.Links, seeds []string) {
 
 	//real task worker very long time need be cancel up code.
-	fmt.Println("### Default do work worker## ", time.Now())
+	fmt.Println("Looping...working............... do work worker## ", time.Now())
+	start := time.Now()
 
-	err := l.CrawlerSZLC(ctx, seeds, out)
-	defer close(out)
+	ctx, cancel := context.WithTimeout(context.Background(), 15*time.Second)
+	defer cancel() //cancel when we are finished conxuming string list.!
 
-	if err != nil {
-		fmt.Println("dowork err :", err)
-	}
+	Pages := make(chan string)
+	Storages := make(chan interface{})
 
-	///////////block worker until finish or canceled.
-	select {
-	case <-ctx.Done():
-		fmt.Println("one day finished.")
-		return nil
-	}
+	defer close(Pages)
+	defer close(Storages)
 
+	// ctx, cancel := context.WithCancel(context.Background())
+
+	List := l.ListURLS(ctx, seeds)
+
+	go l.DetailURLS(ctx, Pages, List)
+	go l.DetailPage(ctx, Storages, Pages)
+
+	l.StorageCockDB(ctx, Storages)
+
+	elapsed := time.Since(start)
+	fmt.Println("Looping...working End End......... All storaged finish consumming save to db...  It took: ", elapsed)
 }
 
 func main() {
 
 	//ten years.
 
-	//tick for one day run once worker
-	// tick := time.NewTicker(time.Duration(dur) * time.Hour)
-
-	////////////////////////////////start/////////////
 	l := links.NewLinks()
 	defer l.Stop()
 	u := "http://127.0.0.1:8001/szlcsccat?keyword=2222"
@@ -49,52 +52,21 @@ func main() {
 		log.Fatal(err)
 	}
 	fmt.Println("seeds len=", len(seeds))
-	// done := make(chan struct{})
 
-	ctx2, cancel2 := context.WithTimeout(context.Background(), (24 * 365 * time.Hour))
-	defer cancel2()
+	////////////////////////////////get list first.
+	stop := time.After(20 * 4 * time.Second)
+	tick := time.NewTicker(20 * time.Second)
+	defer tick.Stop()
 	for {
-
-		List := make(chan string)
-		Pages := make(chan string)
-		Storages := make(chan interface{})
-
-		//durS := 2*dur - 4
-
-		go l.DetailURLS(ctx2, Pages, List)
-		go l.DetailPage(ctx2, Storages, Pages)
-		go l.StorageCockDB(ctx2, Storages)
-
-		ctx, cancel := context.WithTimeout(context.Background(), (20 * time.Hour))
-		defer cancel()
-
-		timer := time.NewTimer(time.Hour * 24)
-		defer timer.Stop()
-
-		go worker(ctx, l, seeds, List)
 		select {
-		case <-ctx2.Done():
-			fmt.Println("## all done.")
-			//close
-			//wait for storage finish
-			close(Storages)
+		case <-tick.C:
 
+			worker(l, seeds)
+
+		case <-stop:
+			fmt.Println("#################All Loop done")
 			return
-		case <-timer.C:
-			fmt.Println("##############>>>> after 24Hours again.")
-			fmt.Println("##############>>>> after 24Hours again.")
-			fmt.Println("##############>>>> after 24Hours again.")
-			fmt.Println("##############>>>> after 24Hours again.")
-			fmt.Println("##############>>>> after 24Hours again.")
-			fmt.Println("##############>>>> after 24Hours again.")
-
-			close(List)
-			close(Storages)
-			close(Pages)
-			continue
-
 		}
-
 	}
 
 }
