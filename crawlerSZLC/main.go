@@ -16,14 +16,14 @@ func worker(l *links.Links, seeds []string) {
 	fmt.Println("Looping...working............... do work worker## ", time.Now())
 	start := time.Now()
 
-	ctx, cancel := context.WithTimeout(context.Background(), 15*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), 2*time.Minute)
 	defer cancel() //cancel when we are finished conxuming string list.!
 
 	Pages := make(chan string)
 	Storages := make(chan interface{})
 
-	// defer close(Pages)
-	// defer close(Storages)
+	defer close(Pages)
+	defer close(Storages)
 
 	// ctx, cancel := context.WithCancel(context.Background())
 
@@ -33,7 +33,6 @@ func worker(l *links.Links, seeds []string) {
 	go l.DetailPage(ctx, Storages, Pages)
 
 	l.StorageCockDB(ctx, Storages)
-	close(Storages)
 
 	elapsed := time.Since(start)
 	fmt.Println("Looping...working End End......... All storaged finish consumming save to db...  It took: ", elapsed)
@@ -55,8 +54,8 @@ func main() {
 	fmt.Println("seeds len=", len(seeds))
 
 	////////////////////////////////get list first.
-	stop := time.After(20 * 4 * time.Second)
-	tick := time.NewTicker(20 * time.Second)
+	stop := time.After(6 * 4 * time.Minute)
+	tick := time.NewTicker(6 * time.Minute)
 	defer tick.Stop()
 	for {
 		select {
