@@ -229,18 +229,26 @@ func (l *Links) StorageCockDB(ctx context.Context, in <-chan interface{}) {
 
 	for v := range in {
 		fmt.Println("XXXXOOOOO##### len(queue) storage channel==", len(queue))
-		if len(queue) >= 10 {
-			//save to db
-			fmt.Println(">>>>>>>>>>>>>>>>>>>>500000 ##### len(queue) storage channel==", len(queue))
 
-			for _, item := range queue {
-				l.DoCockStorage(item)
+		select {
+		case <-ctx.Done():
+			fmt.Println("sorage finished by cancel.")
+			return
+		default:
+
+			if len(queue) >= 10 {
+				//save to db
+				fmt.Println(">>>>>>>>>>>>>>>>>>>>500000 ##### len(queue) storage channel==", len(queue))
+
+				for _, item := range queue {
+					l.DoCockStorage(item)
+				}
+				queue = nil
+				fmt.Println("XXXXOOOOO##### after Nil len(queue)  channel==", len(queue))
+
+			} else {
+				queue = append(queue, v)
 			}
-			queue = nil
-			fmt.Println("XXXXOOOOO##### after Nil len(queue)  channel==", len(queue))
-
-		} else {
-			queue = append(queue, v)
 		}
 	}
 
