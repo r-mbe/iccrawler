@@ -52,8 +52,8 @@ func main() {
 	fmt.Println("seeds len=", len(seeds))
 
 	////////////////////////////////get list first.
-	stop := time.After(6 * 4 * time.Minute)
-	tick := time.NewTicker(6 * time.Minute)
+	stop := time.After(24 * 365 * time.Hour)
+	tick := time.NewTicker(24 * time.Hour)
 	defer tick.Stop()
 
 	//first time
