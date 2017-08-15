@@ -287,6 +287,7 @@ func (l *Links) DetailPage(ctx context.Context, in <-chan string) <-chan interfa
 			select {
 			case <-ctx.Done():
 				fmt.Println(">>>>>>DetailPage goroutine context Done")
+				return
 			default:
 				l.CrawlerDetailPageFromNode(page, dst)
 			}
@@ -336,7 +337,7 @@ func (l *Links) DetailURLS(ctx context.Context, in <-chan string) <-chan string 
 		for href := range in {
 			select {
 			case <-ctx.Done():
-				fmt.Println("close detail chanlel")
+				fmt.Println("close  detailURLS done detail chanlel")
 				return
 			default:
 				fmt.Printf(">>>detailURLS Received chan: list url= %s\n", href)
@@ -383,6 +384,7 @@ func (l *Links) ListURLS(ctx context.Context, urls []string) <-chan string {
 		for _, url := range urls {
 			select {
 			case <-ctx.Done():
+				fmt.Println("ListURLS goroutine done.")
 				return //returning not to leak the goroutine.
 			case dst <- string(url):
 				n++
