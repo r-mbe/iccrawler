@@ -338,7 +338,7 @@ func (l *Links) CrawlerCatListFromNode(url string) ([]string, error) {
 }
 
 //DetailURLS out channel for list page. first output channel
-func (l *Links) DetailURLS(ctx context.Context, out chan<- string, in <-chan string) {
+func (l *Links) DetailURLS(ctx context.Context, out chan<- string, wg *sync.WaitGroup, in <-chan string) {
 	//consurmer
 
 	defer close(out)

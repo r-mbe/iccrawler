@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"fmt"
+	"sync"
 	"time"
 
 	"log"
@@ -29,10 +30,15 @@ func worker(l *links.Links, seeds []string) {
 
 	List := l.ListURLS(ctx, seeds)
 
-	go l.DetailURLS(ctx, Pages, List)
+	var wg sync.WaitGroup
+	wg.Add(1)
+	go l.DetailURLS(ctx, Pages, &wg, List)
+
 	go l.DetailPage(ctx, Storages, Pages)
 
 	l.StorageCockDB(ctx, Storages)
+	wg.Wait()
+	//wait for pages close then close storage channel_price
 
 	elapsed := time.Since(start)
 	fmt.Println("Looping...working End End......... All storaged finish consumming save to db...  It took: ", elapsed)
