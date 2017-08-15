@@ -19,10 +19,7 @@ func worker(l *links.Links, seeds []string) {
 	ctx, cancel := context.WithTimeout(context.Background(), 2*time.Minute)
 	defer cancel() //cancel when we are finished conxuming string list.!
 
-	Storages := make(chan interface{})
-
 	// defer close(Pages)
-	defer close(Storages)
 
 	// ctx, cancel := context.WithCancel(context.Background())
 
@@ -30,7 +27,7 @@ func worker(l *links.Links, seeds []string) {
 
 	Pages := l.DetailURLS(ctx, List)
 
-	Storage := l.DetailPage(ctx, Pages)
+	Storages := l.DetailPage(ctx, Pages)
 
 	l.StorageCockDB(ctx, Storages)
 	//wait for pages close then close storage channel_price
