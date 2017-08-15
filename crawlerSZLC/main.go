@@ -16,7 +16,7 @@ func worker(l *links.Links, seeds []string) {
 	fmt.Println("Looping...working............... do work worker## ", time.Now())
 	start := time.Now()
 
-	ctx, cancel := context.WithTimeout(context.Background(), 2*time.Minute)
+	ctx, cancel := context.WithTimeout(context.Background(), 18*time.Hour)
 	defer cancel() //cancel when we are finished conxuming string list.!
 
 	// defer close(Pages)
