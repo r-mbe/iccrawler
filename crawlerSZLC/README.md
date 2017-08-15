@@ -1,13 +1,14 @@
 # crawler szlcsc
 
-## v0.0.1
+## v0.0.2
 crawler with proxy checker micro service.
 
 
 ## build
 
-go build -o go-crawler-szlc crawler.go
+go build -o go-crawler-szlc main.go
 
+nohup ./go-crawler-szlc >/dev/null 2>&1 &
 
 # Test a speciy function
 
