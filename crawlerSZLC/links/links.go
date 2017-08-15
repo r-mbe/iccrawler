@@ -277,34 +277,24 @@ func (l *Links) StorageCockDB(ctx context.Context, in <-chan interface{}) {
 // }
 
 //DetailPage out channel for list page. first output channel
-func (l *Links) DetailPage(ctx context.Context, out chan<- interface{}, in <-chan string) {
+func (l *Links) DetailPage(ctx context.Context, in <-chan string) <-chan interface{} {
 	//consurmer
 
-	for {
-		select {
-		case <-ctx.Done():
-			fmt.Println("DetailPage list finished.")
-			return
-		case page, ok := <-in:
-			//do resualt.\
-			if ok {
-				fmt.Println("received one page: ", page)
+	dst := make(chan interface{})
 
-				// b := l.cf.Lookup([]byte(page))
-				// if b {
-				// 	fmt.Println("ERR Bloom filter ########## check detailPage.", page)
-				// 	return
-				// }
-
+	go func(ctx context.Context, in <-chan string) {
+		for page := range in {
+			select {
+			case <-ctx.Done():
+				fmt.Println(">>>>>>DetailPage goroutine context Done")
+			default:
 				l.CrawlerDetailPageFromNode(page, out)
-
-				// l.cf.Insert([]byte(page))
-			} else {
-				fmt.Println("received all chan pages")
-				return
 			}
 		}
-	}
+	}(ctx, in)
+
+	return dst
+
 }
 
 //CrawlerCatListFromNode page

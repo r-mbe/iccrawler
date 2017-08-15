@@ -30,7 +30,7 @@ func worker(l *links.Links, seeds []string) {
 
 	Pages := l.DetailURLS(ctx, List)
 
-	go l.DetailPage(ctx, Storages, Pages)
+	Storage := l.DetailPage(ctx, Pages)
 
 	l.StorageCockDB(ctx, Storages)
 	//wait for pages close then close storage channel_price
