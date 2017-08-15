@@ -244,6 +244,15 @@ func (l *Links) StorageCockDB(ctx context.Context, in <-chan interface{}) {
 		}
 	}
 
+	fmt.Println("XXXXOOOOO##### After loop len(queue) storage channel==", len(queue))
+	if len(queue) > 0 {
+		for _, item := range queue {
+			l.DoCockStorage(item)
+		}
+	}
+
+	fmt.Println("xxxx finish")
+
 }
 
 //Storages channel one the last channel close done channal for singal all channal done
