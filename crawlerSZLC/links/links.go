@@ -229,9 +229,9 @@ func (l *Links) StorageCockDB(ctx context.Context, in <-chan interface{}) {
 
 	for {
 		select {
-		case <-ctx.Done():
-			fmt.Println("StorageCockDB list finished.")
-			return
+		// case <-ctx.Done():
+		// 	fmt.Println("StorageCockDB list finished.")
+		// 	return
 		case v, ok := <-in:
 			if ok {
 				fmt.Println("XXXXOOOOO##### len(queue) storage channel==", len(queue))
