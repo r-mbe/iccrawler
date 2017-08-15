@@ -277,8 +277,9 @@ func (l *Links) StorageCockDB(ctx context.Context, in <-chan interface{}) {
 // }
 
 //DetailPage out channel for list page. first output channel
-func (l *Links) DetailPage(ctx context.Context, out chan<- interface{}, in <-chan string) {
+func (l *Links) DetailPage(ctx context.Context, wg *sync.WaitGroup, out chan<- interface{}, in <-chan string) {
 	//consurmer
+	defer (*wg).Done()
 
 	for {
 		select {
@@ -340,7 +341,7 @@ func (l *Links) CrawlerCatListFromNode(url string) ([]string, error) {
 //DetailURLS out channel for list page. first output channel
 func (l *Links) DetailURLS(ctx context.Context, out chan<- string, wg *sync.WaitGroup, in <-chan string) {
 	//consurmer
-
+	defer (*wg).Done()
 	defer close(out)
 
 	for {

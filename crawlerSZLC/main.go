@@ -34,7 +34,8 @@ func worker(l *links.Links, seeds []string) {
 	wg.Add(1)
 	go l.DetailURLS(ctx, Pages, &wg, List)
 
-	go l.DetailPage(ctx, Storages, Pages)
+	wg.Add(1)
+	go l.DetailPage(ctx, &wg, Storages, Pages)
 
 	l.StorageCockDB(ctx, Storages)
 	wg.Wait()
