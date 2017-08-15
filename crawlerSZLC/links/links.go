@@ -277,9 +277,8 @@ func (l *Links) StorageCockDB(ctx context.Context, in <-chan interface{}) {
 // }
 
 //DetailPage out channel for list page. first output channel
-func (l *Links) DetailPage(ctx context.Context, wg *sync.WaitGroup, out chan<- interface{}, in <-chan string) {
+func (l *Links) DetailPage(ctx context.Context, out chan<- interface{}, in <-chan string) {
 	//consurmer
-	defer (*wg).Done()
 
 	for {
 		select {
@@ -339,19 +338,17 @@ func (l *Links) CrawlerCatListFromNode(url string) ([]string, error) {
 }
 
 //DetailURLS out channel for list page. first output channel
-func (l *Links) DetailURLS(ctx context.Context, out chan<- string, wg *sync.WaitGroup, in <-chan string) {
+func (l *Links) DetailURLS(ctx context.Context, in <-chan string) <-chan string {
 	//consurmer
-	defer (*wg).Done()
-	defer close(out)
+	dst := make(chan string)
 
-	for {
-		select {
-		case <-ctx.Done():
-			fmt.Println("DetailURLS list finished.")
-			return
-		case href, ok := <-in:
-			//do resualt.\
-			if ok {
+	go func(ctx context.Context, in <-chan string) {
+		for href := range in {
+			select {
+			case <-ctx.Done():
+				fmt.Println("close detail chanlel")
+				return
+			default:
 				fmt.Printf(">>>detailURLS Received chan: list url= %s\n", href)
 				// go l.CrawlerCatListFromNode(href, out)
 				//if crawler max page num err retry 3 times.
@@ -377,16 +374,14 @@ func (l *Links) DetailURLS(ctx context.Context, out chan<- string, wg *sync.Wait
 				fmt.Println("List page url len=", href, len(data))
 				for i, u := range data {
 					fmt.Printf(">>>XXXXX Go detailURLS  sending  i=%d,url=%s\n", i, u)
-					out <- u
+					dst <- u
 				}
-
-			} else {
-				//channel closed
-				fmt.Println("received all chan list")
-				return
 			}
 		}
-	}
+
+	}(ctx, in)
+
+	return dst
 }
 
 //ListURLS out channel for list page. first output channel

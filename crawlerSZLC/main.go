@@ -3,7 +3,6 @@ package main
 import (
 	"context"
 	"fmt"
-	"sync"
 	"time"
 
 	"log"
@@ -20,7 +19,6 @@ func worker(l *links.Links, seeds []string) {
 	ctx, cancel := context.WithTimeout(context.Background(), 2*time.Minute)
 	defer cancel() //cancel when we are finished conxuming string list.!
 
-	Pages := make(chan string)
 	Storages := make(chan interface{})
 
 	// defer close(Pages)
@@ -30,14 +28,10 @@ func worker(l *links.Links, seeds []string) {
 
 	List := l.ListURLS(ctx, seeds)
 
-	var wg sync.WaitGroup
-	wg.Add(1)
-	go l.DetailURLS(ctx, Pages, &wg, List)
+	Pages := l.DetailURLS(ctx, List)
 
-	wg.Add(1)
 	go l.DetailPage(ctx, &wg, Storages, Pages)
 
-	wg.Wait()
 	l.StorageCockDB(ctx, Storages)
 	//wait for pages close then close storage channel_price
 
