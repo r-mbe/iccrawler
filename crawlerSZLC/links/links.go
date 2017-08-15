@@ -324,9 +324,9 @@ func (l *Links) DetailURLS(ctx context.Context, in <-chan string) <-chan string 
 	go func(ctx context.Context, in <-chan string) {
 		for href := range in {
 			select {
-			case <-ctx.Done():
-				fmt.Println("close  detailURLS done detail chanlel")
-				return
+			// case <-ctx.Done():
+			// 	fmt.Println("close  detailURLS done detail chanlel")
+			// 	return
 			default:
 				fmt.Printf(">>>detailURLS Received chan: list url= %s\n", href)
 				// go l.CrawlerCatListFromNode(href, out)
