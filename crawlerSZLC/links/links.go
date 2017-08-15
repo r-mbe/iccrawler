@@ -227,35 +227,23 @@ func (l *Links) StorageCockDB(ctx context.Context, in <-chan interface{}) {
 
 	queue := []interface{}{}
 
-	for {
-		select {
-		// case <-ctx.Done():
-		// 	fmt.Println("StorageCockDB list finished.")
-		// 	return
-		case v, ok := <-in:
-			if ok {
-				fmt.Println("XXXXOOOOO##### len(queue) storage channel==", len(queue))
-				if len(queue) >= 10 {
-					//save to db
-					fmt.Println(">>>>>>>>>>>>>>>>>>>>500000 ##### len(queue) storage channel==", len(queue))
+	for v := range in {
+		fmt.Println("XXXXOOOOO##### len(queue) storage channel==", len(queue))
+		if len(queue) >= 10 {
+			//save to db
+			fmt.Println(">>>>>>>>>>>>>>>>>>>>500000 ##### len(queue) storage channel==", len(queue))
 
-					for _, item := range queue {
-						l.DoCockStorage(item)
-					}
-					queue = nil
-					fmt.Println("XXXXOOOOO##### after Nil len(queue)  channel==", len(queue))
-
-				} else {
-					queue = append(queue, v)
-				}
-			} else {
-				// channel is empty all finished.
-				fmt.Println("all storage done. in StorageCockDB .")
-				return
+			for _, item := range queue {
+				l.DoCockStorage(item)
 			}
+			queue = nil
+			fmt.Println("XXXXOOOOO##### after Nil len(queue)  channel==", len(queue))
 
+		} else {
+			queue = append(queue, v)
 		}
 	}
+
 }
 
 //Storages channel one the last channel close done channal for singal all channal done
