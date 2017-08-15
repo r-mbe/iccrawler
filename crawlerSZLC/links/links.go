@@ -288,7 +288,7 @@ func (l *Links) DetailPage(ctx context.Context, in <-chan string) <-chan interfa
 			case <-ctx.Done():
 				fmt.Println(">>>>>>DetailPage goroutine context Done")
 			default:
-				l.CrawlerDetailPageFromNode(page, out)
+				l.CrawlerDetailPageFromNode(page, dst)
 			}
 		}
 	}(ctx, in)
