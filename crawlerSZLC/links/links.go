@@ -272,13 +272,13 @@ func (l *Links) DetailPage(ctx context.Context, in <-chan string) <-chan interfa
 
 	go func(ctx context.Context, in <-chan string) {
 		for page := range in {
-			select {
-			case <-ctx.Done():
-				fmt.Println(">>>>>>DetailPage goroutine context Done")
-				return
-			default:
-				l.CrawlerDetailPageFromNode(page, dst)
-			}
+			// select {
+			// case <-ctx.Done():
+			// 	fmt.Println(">>>>>>DetailPage goroutine context Done")
+			// 	return
+			// default:
+			l.CrawlerDetailPageFromNode(page, dst)
+			// }
 		}
 	}(ctx, in)
 
