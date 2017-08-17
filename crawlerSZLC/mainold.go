@@ -1,4 +1,4 @@
-package main
+package mainold
 
 import (
 	"context"
@@ -16,7 +16,7 @@ func worker(l *links.Links, seeds []string) {
 	fmt.Println("Looping...working............... do work worker## ", time.Now())
 	start := time.Now()
 
-	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Hour)
+	ctx, cancel := context.WithTimeout(context.Background(), 18*time.Hour)
 	defer cancel() //cancel when we are finished conxuming string list.!
 
 	// defer close(Pages)
@@ -51,6 +51,24 @@ func main() {
 	}
 	fmt.Println("seeds len=", len(seeds))
 
+	////////////////////////////////get list first.
+	stop := time.After(24 * 365 * time.Hour)
+	tick := time.NewTicker(24 * time.Hour)
+	defer tick.Stop()
+
 	//first time
 	worker(l, seeds)
+
+	for {
+		select {
+		case <-tick.C:
+
+			worker(l, seeds)
+
+		case <-stop:
+			fmt.Println("#################All Loop done")
+			return
+		}
+	}
+
 }
