@@ -13,3 +13,8 @@ nohup ./go-crawler-szlc >/dev/null 2>&1 &
 # Test a speciy function
 
 go test -v  -test.run TestGetPageListDetail
+
+
+# crontab run
+
+crontab rootcron
