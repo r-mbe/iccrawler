@@ -136,19 +136,18 @@ func (l *Links) convertAndSave(d interface{}) error {
 		return errors.New("Err data error")
 	}
 
-	fmt.Println("input partnumber", in)
+	fmt.Println("input 1111 1")
+	fmt.Println("input 1111 oooo partnumber === nil", in)
 
 	o.Cat = in.Cat
-
-	if in.Part == nil {
-		fmt.Println("in.part==== nil")
-		o.Part = "na"
-	} else {
-		o.Part = in.Part
-	}
+	fmt.Println("input 1111 2")
+	o.Part = "na"
+	fmt.Println("input 1111 3")
 	o.Description = in.Desc
 	o.Package = in.Pkg
 	o.Promaf = in.Promaf
+
+	fmt.Println("input 1111 4")
 
 	o.SalesUnitPrice = 0.0
 	o.PanPian = 0
