@@ -88,6 +88,7 @@ func (c *Ocsv) Init() error {
 	//set header for csv file
 	gocsv.MarshalFile(s, f)
 
+	fmt.Println("csv init ok.....")
 	return err
 }
 

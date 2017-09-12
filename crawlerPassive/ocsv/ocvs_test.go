@@ -14,6 +14,7 @@ func TestWritetoFile(t *testing.T) {
 	}
 
 	csv := NewOcsv()
+
 	err := csv.Init()
 	if err != nil {
 		fmt.Println("init err: ", err)
