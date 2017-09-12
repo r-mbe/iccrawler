@@ -143,7 +143,7 @@ func (l *Links) convertAndSave(d interface{}) error {
 
 	o.Cat = in.Cat
 	o.Part = in.Part
-	o.Description = in.Desc
+	o.Description = in.Detail
 	o.Package = in.Pkg
 	o.ICode = in.Icode
 	o.Promaf = in.Promaf
