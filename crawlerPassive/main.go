@@ -46,7 +46,7 @@ func main() {
 	configFile := flag.String("config", "./etc/crawler.passive.toml", "crawler passive config file.")
 	flag.Parse()
 
-	fmt.Println("configFile=: %v\n", *configFile)
+	fmt.Println("configFile =: %v\n", *configFile)
 
 	c, err := config.NewConfigWithFile(*configFile)
 	if err != nil {
