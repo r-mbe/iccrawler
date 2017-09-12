@@ -29,9 +29,12 @@ type Links struct {
 //NewLinks newlinks
 func NewLinks(c *config.Config) *Links {
 
+	fmt.Println("init links csv")
+
 	csv := ocsv.NewOcsv()
 	err := csv.Init()
 	if err != nil {
+		fmt.Println("init err: ", err)
 		log.Fatal(err)
 	}
 
@@ -309,4 +312,5 @@ func (l *Links) StorageCSV(ctx context.Context, in <-chan interface{}) {
 
 func (l *Links) Stop() {
 	defer l.l.Close()
+	defer l.c.Close()
 }
