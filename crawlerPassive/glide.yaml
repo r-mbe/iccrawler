@@ -1,0 +1,8 @@
+package: techtoolkit.ickey.cn/crawlerPassive
+import:
+- package: github.com/jinzhu/gorm
+  version: 2a1463811ee1dc85d168fd639a2d4251d030e6e5
+- package: github.com/gocarina/gocsv
+  version: eb0665f781337b21e8e193c6f888e2acaa0ff7e4
+- package: github.com/sirupsen/logrus
+  version: 3eef8ce63d02f65d2da43214faf7bb19b0b2bb7a

@@ -1,0 +1,27 @@
+hash: 0ba6056c944334e3cd8eaa37fc4cb26f9c777252c7d0f8b2e75fc4ac10870e59
+updated: 2017-07-28T09:31:01.4025973+08:00
+imports:
+- name: github.com/gocarina/gocsv
+  version: eb0665f781337b21e8e193c6f888e2acaa0ff7e4
+- name: github.com/jinzhu/gorm
+  version: 2a1463811ee1dc85d168fd639a2d4251d030e6e5
+  subpackages:
+  - dialects/postgres
+- name: github.com/jinzhu/inflection
+  version: 1c35d901db3da928c72a72d8458480cc9ade058f
+- name: github.com/leemcloughlin/gofarmhash
+  version: 0a055c5b87a8c55ce83459cbf2776b563822a942
+- name: github.com/lib/pq
+  version: 8837942c3e09574accbc5f150e2c5e057189cace
+  subpackages:
+  - hstore
+  - oid
+- name: github.com/seiflotfy/cuckoofilter
+  version: 5bd91bc4b946c7c2a4e4e088532c9ff48f9b5045
+- name: github.com/sirupsen/logrus
+  version: 3eef8ce63d02f65d2da43214faf7bb19b0b2bb7a
+- name: golang.org/x/sys
+  version: 35ef4487ce0a1ea5d4b616ffe71e34febe723695
+  subpackages:
+  - unix
+testImports: []
