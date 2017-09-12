@@ -5,7 +5,6 @@ import (
 	"errors"
 	"fmt"
 	"log"
-	"os"
 	"sync"
 
 	"github.com/stanxii/iccrawler/crawlerPassive/config"
@@ -298,8 +297,7 @@ func (l *Links) StorageCSV(ctx context.Context, in <-chan interface{}) {
 		case v, ok := <-in:
 			//do resualt.\
 			if ok {
-				fmt.Printf("receive  one chan storage XXXXXXX++++")
-				os.Exit(0)
+				// os.Exit(0)
 				fmt.Printf("receive  one chan storage %v.....", v)
 				l.convertAndSave(v)
 			} else {
