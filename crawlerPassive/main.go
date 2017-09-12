@@ -43,6 +43,8 @@ func worker(l *links.Links, seeds []string) {
 
 func main() {
 
+	fmt.Println("hello ..")
+
 	configFile := flag.String("config", "./etc/crawler.passive.toml", "crawler passive config file.")
 	flag.Parse()
 
