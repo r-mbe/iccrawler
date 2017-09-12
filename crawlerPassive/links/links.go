@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"log"
+	"os"
 	"sync"
 
 	"github.com/stanxii/iccrawler/crawlerPassive/config"
@@ -129,6 +130,9 @@ type CSVPassivePTNumber struct {
 }
 
 func (l *Links) convertAndSave(d interface{}) error {
+
+	fmt.Println("input 1111 1")
+
 	o := new(ocsv.CSVPassivePTNumber)
 
 	in, ok := d.(request.PartNumber)
@@ -136,19 +140,18 @@ func (l *Links) convertAndSave(d interface{}) error {
 		return errors.New("Err data error")
 	}
 
-	fmt.Println("input partnumber", in)
+	fmt.Println("input 1111 1")
+	fmt.Println("input 1111 oooo partnumber === nil", in)
 
 	o.Cat = in.Cat
-
-	if in.Part == nil {
-		fmt.Println("in.part==== nil")
-		o.Part = "na"
-	} else {
-		o.Part = in.Part
-	}
+	fmt.Println("input 1111 2")
+	o.Part = "na"
+	fmt.Println("input 1111 3")
 	o.Description = in.Desc
 	o.Package = in.Pkg
 	o.Promaf = in.Promaf
+
+	fmt.Println("input 1111 4")
 
 	o.SalesUnitPrice = 0.0
 	o.PanPian = 0
@@ -292,6 +295,8 @@ func (l *Links) StorageCSV(ctx context.Context, in <-chan interface{}) {
 		case v, ok := <-in:
 			//do resualt.\
 			if ok {
+				fmt.Printf("receive  one chan storage XXXXXXX++++")
+				os.Exit(0)
 				fmt.Printf("receive  one chan storage %v.....", v)
 				l.convertAndSave(v)
 			} else {

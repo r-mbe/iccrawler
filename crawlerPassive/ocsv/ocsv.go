@@ -42,15 +42,15 @@ type PartNumber struct {
 }
 
 type CSVPassivePTNumber struct {
-	Cat            string  `csv:"*产品类别"`
-	Part           string  `csv:"*产品型号"`
-	Description    string  `csv:"描述"`
-	Package        string  `csv:"封装/规格"`
-	Promaf         string  `csv:"*品牌"`
-	SalesUnitPrice float64 `csv:"销售单价"`
-	PanPian        int64   `csv:"1圆盘有*片"`
-	RecentSell     int64   `csv:"近期约售"`
-	Stock          int64   `csv:"现货库存"`
+	Cat            string `csv:"*产品类别"`
+	Part           string `csv:"*产品型号"`
+	Description    string `csv:"描述"`
+	Package        string `csv:"封装/规格"`
+	Promaf         string `csv:"*品牌"`
+	SalesUnitPrice int64  `csv:"销售单价"`
+	PanPian        int64  `csv:"1圆盘有*片"`
+	RecentSell     int64  `csv:"近期约售"`
+	Stock          int64  `csv:"现货库存"`
 }
 
 //NewOcsv new
@@ -83,6 +83,8 @@ func (c *Ocsv) Init() error {
 
 	gocsv.SetCSVWriter(initOutWriter)
 
+	fmt.Println("init ocsv....xxxx1")
+
 	s := []CSVPassivePTNumber{}
 
 	//set header for csv file
@@ -100,7 +102,7 @@ func (c *Ocsv) Append(in interface{}) error {
 		return errors.New("Err csvPart error")
 	}
 
-	fmt.Println("Now CSv... saving. will append csv part:", v)
+	fmt.Println("Now CSv... saving. will append csv part:", v, c.f)
 	//convert part to csv parnumber
 	s := []*CSVPassivePTNumber{}
 	s = append(s, v)
