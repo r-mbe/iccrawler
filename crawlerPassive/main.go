@@ -11,8 +11,8 @@ import (
 
 	"log"
 
-	"techtoolkit.ickey.cn/crawlerPassive/config"
-	"techtoolkit.ickey.cn/crawlerPassive/links"
+	"github.com/stanxii/iccrawler/crawlerPassive/config"
+	"github.com/stanxii/iccrawler/crawlerPassive/links"
 )
 
 func worker(l *links.Links, seeds []string) {
