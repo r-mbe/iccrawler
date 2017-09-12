@@ -37,8 +37,8 @@ start_server()
         if [[ $pid -le 0 ]];then
                 make clean
                 make
-                $server_bin  -config=$server_ini  > $server_log &
-#                $server_bin  -config=$server_ini  > $server_log
+#                $server_bin  -config=$server_ini  > $server_log &
+                $server_bin  -config=$server_ini  > $server_log
                 echo "start ok"
         else
                 echo "started"
