@@ -28,8 +28,17 @@ type Links struct {
 //NewLinks newlinks
 func NewLinks(c *config.Config) *Links {
 
+	csv := ocsv.NewOcsv()
+	err := csv.Init()
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	fmt.Println("init links csv")
+
 	ret := &Links{
 		cfg:    c,
+		c:      csv,
 		out:    make(chan string),
 		finish: make(chan int),
 	}
@@ -47,12 +56,6 @@ func (l *Links) init() {
 
 	l.l = *logp
 	l.l.Init("crawer-passive.log")
-
-	l.c = ocsv.NewOcsv()
-	err := l.c.Init()
-	if err != nil {
-		log.Fatal(err)
-	}
 
 }
 
@@ -144,6 +147,8 @@ func (l *Links) convertAndSave(d interface{}) error {
 	o.RecentSell = 0
 
 	o.Stock = in.Stock
+
+	fmt.Println("will save to csv =", o)
 
 	l.c.Append(o)
 	return nil
@@ -271,21 +276,22 @@ func (l *Links) ListURLS(ctx context.Context, urls []string) <-chan string {
 //StorageCSV channel one the last channel close done channal for singal all channal done
 func (l *Links) StorageCSV(ctx context.Context, in <-chan interface{}) {
 	//consurmer
-
-	for v := range in {
-
+	for {
 		select {
 		case <-ctx.Done():
 			fmt.Println("sorage finished by cancel.")
 			return
-		default:
-
-			l.convertAndSave(v)
+		case v, ok := <-in:
+			//do resualt.\
+			if ok {
+				fmt.Printf("receive  one chan storage %v.....", v)
+				l.convertAndSave(v)
+			} else {
+				fmt.Println("recieve all chan storage....")
+				return
+			}
 		}
 	}
-
-	fmt.Println("xxxx finish")
-
 }
 
 func (l *Links) Stop() {
