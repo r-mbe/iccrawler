@@ -1,6 +1,6 @@
 package seed
 
-import "techtoolkit.ickey.cn/crawlerPassive/request"
+import "github.com/stanxii/iccrawler/crawlerPassive/request"
 
 //Seed seed struct
 type Seed struct {

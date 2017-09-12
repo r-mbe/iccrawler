@@ -7,11 +7,11 @@ import (
 	"log"
 	"sync"
 
-	"techtoolkit.ickey.cn/crawlerPassive/config"
-	"techtoolkit.ickey.cn/crawlerPassive/logp"
-	"techtoolkit.ickey.cn/crawlerPassive/ocsv"
-	"techtoolkit.ickey.cn/crawlerPassive/request"
-	"techtoolkit.ickey.cn/crawlerPassive/seed"
+	"github.com/stanxii/iccrawler/crawlerPassive/config"
+	"github.com/stanxii/iccrawler/crawlerPassive/logp"
+	"github.com/stanxii/iccrawler/crawlerPassive/ocsv"
+	"github.com/stanxii/iccrawler/crawlerPassive/request"
+	"github.com/stanxii/iccrawler/crawlerPassive/seed"
 )
 
 //Links export Links to main Cralwer
