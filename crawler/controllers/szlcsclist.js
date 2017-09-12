@@ -93,7 +93,6 @@ async function getOwnerRow($, html) {
     let pro_icode = sup.find('td[valign="top"]').eq(1).find('> table > tbody > tr').eq(3).find('>td').eq(1).find('p').text().trim().replace(/\s+/g, "").replace(/\r\n|\n/g, "");
 
     let i = pro_icode.indexOf('：')
-    let j = pro_icode.indexOf(':')
     if (i != -1 || j != -1) {
       pro_icode = pro_icode.substr(i+1).trim()
     }
@@ -104,10 +103,9 @@ async function getOwnerRow($, html) {
 
     let pro_maf = sup.find('td[valign="top"]').eq(1).find('> table > tbody > tr').eq(0).find('>td').eq(1).text().trim().replace(/\s+/g, "").replace(/\r\n|\n/g, "");
 
-    let i = pro_maf.indexOf('：')
-    let j = pro_maf.indexOf(':')
-    if (i != -1 || j != -1) {
-      pro_maf = pro_maf.substr(i+1).trim()
+    let k = pro_maf.indexOf('：')
+    if (k != -1) {
+      pro_maf = pro_maf.substr(k+1).trim()
     }
 
     res.part = part;
