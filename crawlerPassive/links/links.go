@@ -150,7 +150,7 @@ func (l *Links) convertAndSave(d interface{}) error {
 
 	o.Stock = in.Stock
 
-	fmt.Println("will save to csv =", o)
+	fmt.Println("xxxxxwill save to csv =", o)
 
 	l.c.Append(o)
 	return nil

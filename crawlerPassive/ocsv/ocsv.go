@@ -103,7 +103,6 @@ func (c *Ocsv) Append(in interface{}) error {
 	fmt.Println("Now CSv... saving. will append csv part:", v)
 	//convert part to csv parnumber
 	s := []*CSVPassivePTNumber{}
-	s = nil
 	s = append(s, v)
 	err := gocsv.MarshalWithoutHeaders(s, c.f)
 	if err != nil {
