@@ -46,6 +46,7 @@ type CSVPassivePTNumber struct {
 	Part           string `csv:"*产品型号"`
 	Description    string `csv:"描述"`
 	Package        string `csv:"封装/规格"`
+	ICode          string `csv:"编号"`
 	Promaf         string `csv:"*品牌"`
 	SalesUnitPrice int64  `csv:"销售单价"`
 	PanPian        int64  `csv:"1圆盘有*片"`

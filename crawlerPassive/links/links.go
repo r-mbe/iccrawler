@@ -124,6 +124,7 @@ type CSVPassivePTNumber struct {
 	Part           string  `csv:"*产品型号"`
 	Description    string  `csv:"描述"`
 	Package        string  `csv:"封装/规格"`
+	Icode          string  `csv:"编号"`
 	Promaf         string  `csv:"*品牌"`
 	SalesUnitPrice float64 `csv:"销售单价"`
 	PanPian        int64   `csv:"1圆盘有*片"`
@@ -133,8 +134,6 @@ type CSVPassivePTNumber struct {
 
 func (l *Links) convertAndSave(d interface{}) error {
 
-	fmt.Println("input 1111 1")
-
 	o := new(ocsv.CSVPassivePTNumber)
 
 	in, ok := d.(request.PartNumber)
@@ -142,26 +141,18 @@ func (l *Links) convertAndSave(d interface{}) error {
 		return errors.New("Err data error")
 	}
 
-	fmt.Println("input 1111 1")
-	fmt.Println("input 1111 oooo partnumber === nil", in)
-
 	o.Cat = in.Cat
-	fmt.Println("input 1111 2")
-	o.Part = "na"
-	fmt.Println("input 1111 3")
+	o.Part = in.Part
 	o.Description = in.Desc
 	o.Package = in.Pkg
+	o.ICode = in.Icode
 	o.Promaf = in.Promaf
 
-	fmt.Println("input 1111 4")
-
 	o.SalesUnitPrice = 0.0
-	o.PanPian = 0
-	o.RecentSell = 0
+	o.PanPian = in.YuanPan
+	o.RecentSell = in.RecentSell
 
 	o.Stock = in.Stock
-
-	fmt.Println("xxxxxwill save to csv =", o)
 
 	l.c.Append(o)
 	return nil

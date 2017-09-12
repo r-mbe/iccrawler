@@ -57,10 +57,40 @@ async function getOwnerRow($, html) {
     }
     res.stock = stock;
 
+    //yuanpan
+    let yuanpan = sup.find('td[valign="top"]').eq(3).find('> table > tbody > tr').eq(0).text().trim().replace(/\s+/g, "").replace(/\r\n|\n/g, "");
+    yuanpan = yuanpan.replace(/[^\d\.]/g, '');
+    if(yuanpan == "") {
+      yuanpan = 0;
+    }else {
+      yuanpan = Number.parseInt(yuanpan);
+      if(isNaN(yuanpan) || !isFinite(yuanpan)) {
+        console.log("yuanpan is Nan or finite.")
+        yuanpan = 0;
+      }
+    }
+    res.yuanpan = yuanpan;
+
+    //jinshou
+    let recentsell = sup.find('td[valign="top"]').eq(3).find('> table > tbody > tr').eq(1).text().trim().replace(/\s+/g, "").replace(/\r\n|\n/g, "");
+    recentsell = recentsell.replace(/[^\d\.]/g, '');
+    if(recentsell == "") {
+      recentsell = 0;
+    }else {
+      recentsell = Number.parseInt(recentsell);
+      if(isNaN(recentsell) || !isFinite(recentsell)) {
+        console.log("recentsell is Nan or finite.")
+        recentsell = 0;
+      }
+    }
+    res.recentsell = recentsell;
+
+
     let pro_cat = sup.find('td[valign="top"]').eq(1).find('> table > tbody > tr').eq(0).find('>td').eq(0).find('a').first().text().trim().replace(/\s+/g, "").replace(/\r\n|\n/g, "");
     let pro_detail = sup.find('td[valign="top"]').eq(1).find('> table > tbody > tr').eq(2).find('>td').eq(0).text().trim().replace(/\s+/g, "").replace(/\r\n|\n/g, "");
 
-    let pro_pkg = sup.find('td[valign="top"]').eq(1).find('> table > tbody > tr').eq(3).text().trim().replace(/\s+/g, "").replace(/\r\n|\n/g, "");
+    let pro_pkg = sup.find('td[valign="top"]').eq(1).find('> table > tbody > tr').eq(3).find('>td').eq(0).find('span').first().text().trim().replace(/\s+/g, "").replace(/\r\n|\n/g, "");
+    let pro_icode = sup.find('td[valign="top"]').eq(1).find('> table > tbody > tr').eq(3).find('>td').eq(1).find('p').text().trim().replace(/\s+/g, "").replace(/\r\n|\n/g, "");
     let pro_desc = sup.find('td[valign="top"]').eq(1).find('> table > tbody > tr').eq(4).find('>td').eq(0).text().trim().replace(/\s+/g, "").replace(/\r\n|\n/g, "");
 
     let pro_maf = sup.find('td[valign="top"]').eq(1).find('> table > tbody > tr').eq(0).find('>td').eq(1).text().trim().replace(/\s+/g, "").replace(/\r\n|\n/g, "");
@@ -70,6 +100,7 @@ async function getOwnerRow($, html) {
     res.pro_cat = pro_cat;
     res.pro_detail = pro_detail;
     res.pro_pkg = pro_pkg;
+    res.pro_icode = pro_icode;
     res.pro_brand = pro_desc;
 
     //not include index 0 params.

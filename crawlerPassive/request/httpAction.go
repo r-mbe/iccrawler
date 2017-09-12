@@ -25,17 +25,20 @@ type PageResponse struct {
 
 //PartNumber str
 type PartNumber struct {
-	Status  int       `json:"status"`
-	Keyword string    `json:"keyword"`
-	Steps   []int64   `json:"steps"`
-	Prices  []float64 `json:"prices"`
-	Part    string    `json:"part"`
-	Promaf  string    `json:"pro_maf"`
-	Stock   int64     `json:"stock"`
-	Cat     string    `json:"pro_cat"`
-	Detail  string    `json:"pro_detail"`
-	Pkg     string    `json:"pro_pkg"`
-	Desc    string    `json:"pro_desc"`
+	Status     int       `json:"status"`
+	Keyword    string    `json:"keyword"`
+	Steps      []int64   `json:"steps"`
+	Prices     []float64 `json:"prices"`
+	Part       string    `json:"part"`
+	Promaf     string    `json:"pro_maf"`
+	Stock      int64     `json:"stock"`
+	Cat        string    `json:"pro_cat"`
+	Detail     string    `json:"pro_detail"`
+	Pkg        string    `json:"pro_pkg"`
+	Desc       string    `json:"pro_desc"`
+	YuanPan    int64     `json:"yuanpan"`
+	RecentSell int64     `json:"recentsell"`
+	Icode      string    `json:"pro_icode"`
 }
 
 //PartNumberResponse part
