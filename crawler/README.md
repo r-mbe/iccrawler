@@ -1,6 +1,10 @@
 # how test rest api
 #DEBUG=nightmare xvfb-run nod# tools postman
 
+
+kill -9 $(pidof electron)
+
+
 # v0.0.4 features
 DEBUG=nightmare xvfb-run node --harmony-async-await bin/www
 crawlerT for crawler client.

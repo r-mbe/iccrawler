@@ -92,16 +92,24 @@ async function getOwnerRow($, html) {
     let pro_pkg = sup.find('td[valign="top"]').eq(1).find('> table > tbody > tr').eq(3).find('>td').eq(0).find('span').text().trim().replace(/\s+/g, "").replace(/\r\n|\n/g, "");
     let pro_icode = sup.find('td[valign="top"]').eq(1).find('> table > tbody > tr').eq(3).find('>td').eq(1).find('p').text().trim().replace(/\s+/g, "").replace(/\r\n|\n/g, "");
 
-    i = pro_icode.indexOf(':')
-    if i > 0 {
-      pro_icode = pro_icode.substr(i+1)
+    let i = pro_icode.indexOf('：')
+    let j = pro_icode.indexOf(':')
+    if (i != -1 || j != -1) {
+      pro_icode = pro_icode.substr(i+1).trim()
     }
-    
+
     res.pro_icode = pro_icode
 
     let pro_desc = sup.find('td[valign="top"]').eq(1).find('> table > tbody > tr').eq(4).find('>td').eq(0).text().trim().replace(/\s+/g, "").replace(/\r\n|\n/g, "");
 
     let pro_maf = sup.find('td[valign="top"]').eq(1).find('> table > tbody > tr').eq(0).find('>td').eq(1).text().trim().replace(/\s+/g, "").replace(/\r\n|\n/g, "");
+
+    let i = pro_maf.indexOf('：')
+    let j = pro_maf.indexOf(':')
+    if (i != -1 || j != -1) {
+      pro_maf = pro_maf.substr(i+1).trim()
+    }
+
     res.part = part;
     res.pro_maf = pro_maf;
 
