@@ -59,15 +59,16 @@ func main() {
 	}
 
 	defer l.Stop()
-	u := "http://127.0.0.1:8001/szlcsccat?keyword=2222"
-	// u := "http://10.8.15.9:8001/szlcsccat?keyword=2222"
-	seeds, err := l.GetSeedURLS(u)
-	if err != nil {
-		fmt.Println("get init seed error")
-		log.Fatal(err)
-	}
-	fmt.Println("seeds len=", len(seeds))
 
+	//passive seeds
+	seeds := []string{
+		"http://www.szlcsc.com/so/catalog/308.html",
+		"http://www.szlcsc.com/so/catalog/312.html",
+		"http://www.szlcsc.com/so/catalog/316.html",
+		"http://www.szlcsc.com/so/catalog/348.html",
+	}
+
+	fmt.Println("seeds len=", len(seeds))
 	//first time
 	worker(l, seeds)
 
