@@ -139,9 +139,9 @@ func (l *Links) convertAndSave(d interface{}) error {
 	o.Package = in.Pkg
 	o.Promaf = in.Promaf
 
-	// o.SalesUnitPrice =
-	// o.PanPian =
-	// o.RecentSell =
+	o.SalesUnitPrice = 0.0
+	o.PanPian = 0
+	o.RecentSell = 0
 
 	o.Stock = in.Stock
 
