@@ -43,10 +43,16 @@ func (l *Links) init() {
 	l.s = new(seed.Seed)
 	l.Wg = new(sync.WaitGroup)
 
-	log := logp.NewLog()
+	logp := logp.NewLog()
 
-	l.l = *log
+	l.l = *logp
 	l.l.Init("crawer-passive.log")
+
+	l.c = ocsv.NewOcsv()
+	err := l.c.Init()
+	if err != nil {
+		log.Fatal(err)
+	}
 
 }
 
