@@ -139,7 +139,13 @@ func (l *Links) convertAndSave(d interface{}) error {
 	fmt.Println("input partnumber", in)
 
 	o.Cat = in.Cat
-	o.Part = in.Part
+
+	if in.Part == nil {
+		fmt.Println("in.part==== nil")
+		o.Part = "na"
+	} else {
+		o.Part = in.Part
+	}
 	o.Description = in.Desc
 	o.Package = in.Pkg
 	o.Promaf = in.Promaf
