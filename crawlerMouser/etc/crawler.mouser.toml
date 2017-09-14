@@ -1,0 +1,5 @@
+#product
+debug = false
+
+# output csv file name
+csv_out = "crawler_passive"
