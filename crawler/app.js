@@ -53,6 +53,7 @@ app.use('/anglia', anglia);
 app.use('/anglialist', anglialist);
 app.use('/angliapages', angliapages);
 app.use('/szlcsclist', szlcsclist);
+app.use('/mouserlist', mouserlist);
 app.use('/szlcsccat', szlcsccat);
 app.use('/szlcscpages', szlcscpages);
 
