@@ -65,21 +65,22 @@ func main() {
 	//passive seeds
 	//page = 25
 	//http://www.mouser.cn/Passive-Components/Antennas/_/N-8w0fa/?No=75
+
 	seeds := []string{
 		"http://www.mouser.cn/Passive-Components/Antennas/_/N-8w0fa/",
-     "http://www.mouser.cn/Passive-Components/Ferrites/_/N-fb8t2/",
-		 "http://www.mouser.cn/Passive-Components/Signal-Conditioning/_/N-8bzui/",
-		 "http://www.mouser.cn/Passive-Components/Audio-Transformers-Signal-Transformers/_/N-5gbg/",
-		 "http://www.mouser.cn/Passive-Components/Frequency-Control-Timing-Devices/_/N-6zu9e/",
-		 "http://www.mouser.cn/Passive-Components/Thermistors-NTC/_/N-6g7mw/",
-		 "http://www.mouser.cn/Passive-Components/Capacitors/_/N-5g7r/",
-		 "http://www.mouser.cn/Passive-Components/Inductors-Chokes-Coils/_/N-5gb4/",
-		 "http://www.mouser.cn/Passive-Components/Thermistors-PTC/_/N-796na/",
-		 "http://www.mouser.cn/Passive-Components/EMI-Filters-EMI-Suppression/_/N-18v9d/",
-		 "http://www.mouser.cn/Passive-Components/Potentiometers-Trimmers-Rheostats/_/N-9q0yi/",
-		 "http://www.mouser.cn/Passive-Components/Varistors/_/N-6g7mv/",
-		 "http://www.mouser.cn/Passive-Components/Encoders/_/N-6g7nx/",
-		 "http://www.mouser.cn/Passive-Components/Resistors/_/N-5g9n/"
+		"http://www.mouser.cn/Passive-Components/Ferrites/_/N-fb8t2/",
+		"http://www.mouser.cn/Passive-Components/Signal-Conditioning/_/N-8bzui/",
+		"http://www.mouser.cn/Passive-Components/Audio-Transformers-Signal-Transformers/_/N-5gbg/",
+		"http://www.mouser.cn/Passive-Components/Frequency-Control-Timing-Devices/_/N-6zu9e/",
+		"http://www.mouser.cn/Passive-Components/Thermistors-NTC/_/N-6g7mw/",
+		"http://www.mouser.cn/Passive-Components/Capacitors/_/N-5g7r/",
+		"http://www.mouser.cn/Passive-Components/Inductors-Chokes-Coils/_/N-5gb4/",
+		"http://www.mouser.cn/Passive-Components/Thermistors-PTC/_/N-796na/",
+		"http://www.mouser.cn/Passive-Components/EMI-Filters-EMI-Suppression/_/N-18v9d/",
+		"http://www.mouser.cn/Passive-Components/Potentiometers-Trimmers-Rheostats/_/N-9q0yi/",
+		"http://www.mouser.cn/Passive-Components/Varistors/_/N-6g7mv/",
+		"http://www.mouser.cn/Passive-Components/Encoders/_/N-6g7nx/",
+		"http://www.mouser.cn/Passive-Components/Resistors/_/N-5g9n/",
 	}
 
 	fmt.Println("seeds len=", len(seeds))
