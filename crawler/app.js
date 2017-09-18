@@ -20,6 +20,7 @@ var anglialist = require('./routes/anglialist');
 var angliapages = require('./routes/angliapages');
 var szlcsclist = require('./routes/szlcsclist');
 var mouserlist = require('./routes/mouserlist');
+var octopartlist = require('./routes/octopartlist');
 var szlcsccat = require('./routes/szlcsccat');
 var szlcscpages = require('./routes/szlcscpages');
 var getip = require('./routes/getip');

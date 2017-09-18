@@ -33,11 +33,11 @@ async function getOwnerRow($, html) {
 
     // console.log("parse roooooow data ====" + sup);
     //制造商零件编号  manufacturer part
-    let manufacturer_part = sup.find('td').eq(3).find('a').text().trim().replace(/\s+/g, "").replace(/\r\n|\n/g, "");
-    let manufacturer = sup.find('td').eq(4).find('a').text().trim().replace(/\s+/g, "").replace(/\r\n|\n/g, "");
+    let part-card-mpn = sup.find('span.part-card-mpn').text().trim().replace(/\s+/g, "").replace(/\r\n|\n/g, "");
+    // let manufacturer = sup.find('td').eq(4).find('a').text().trim().replace(/\s+/g, "").replace(/\r\n|\n/g, "");
 
-    res.manufacturer_part = part;
-    res.manufacturer = pro_maf;
+    res.part-card-mpn = part;
+    // res.manufacturer = pro_maf;
 
     return res;
 }
@@ -47,7 +47,7 @@ async function getOwnerRow($, html) {
 async function getAllSuppliers(html) {
     let res = { data: []};
     let $ = await cheerio.load(html);
-    let owners = await $('table .SearchResultsTable tr');
+    let owners = await $('table.serp-cards-table tbody.serp-part-card');
 
     if (!(typeof owners !== 'undefined' && owners)) {
         console.log('owners undefined...' + owners);
