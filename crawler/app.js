@@ -55,6 +55,7 @@ app.use('/anglialist', anglialist);
 app.use('/angliapages', angliapages);
 app.use('/szlcsclist', szlcsclist);
 app.use('/mouserlist', mouserlist);
+app.use('/octopartlist', octopartlist);
 app.use('/szlcsccat', szlcsccat);
 app.use('/szlcscpages', szlcscpages);
 
