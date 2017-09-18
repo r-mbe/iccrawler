@@ -33,10 +33,10 @@ async function getOwnerRow($, html) {
 
     // console.log("parse roooooow data ====" + sup);
     //制造商零件编号  manufacturer part
-    let part-card-mpn = sup.find('span.part-card-mpn').text().trim().replace(/\s+/g, "").replace(/\r\n|\n/g, "");
+    let partCardMpn = sup.find('span.part-card-mpn').text().trim().replace(/\s+/g, "").replace(/\r\n|\n/g, "");
     // let manufacturer = sup.find('td').eq(4).find('a').text().trim().replace(/\s+/g, "").replace(/\r\n|\n/g, "");
 
-    res.part-card-mpn = part;
+    res.partCardMpn = part;
     // res.manufacturer = pro_maf;
 
     return res;
