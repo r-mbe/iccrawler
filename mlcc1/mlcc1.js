@@ -32,9 +32,10 @@ await nightmare
   .type('#login_email_password', '@123456')
   .click('#login_button')
   .wait('#content .tree')
-  .click("#content > div:nth-child(3) > a")
-  .wait('.modal-content')
+  // .click("#content > div:nth-child(3) > a")
+  // .wait('.modal-content')
   .goto('http://www.mlcc1.com/search_simplex.html?searchkey=&flag=4')
+  .wait('.search_list')
   .evaluate(() => {
     return Array.from(document.querySelectorAll('.search_list  a.parts_n')).map(a => a.href);
   })
@@ -45,6 +46,7 @@ await nightmare
 
      let data = [];
     return  Promise.all(links.map(async link => {
+
       let nightmare2 ;
       var proxyIp = await ProxM.getProxyIps();
       if (!proxyIp.found) {
@@ -63,38 +65,60 @@ await nightmare
          show: true })
       }
 
-
+      setTimeout(function() {
+       console.log('Blah blah blah blah extra-blah');
+     }, 300);
 
        return await nightmare2
         .goto(link)
         .wait('.red_bord')
         .evaluate(() => {
-          return document.querySelector('.red_bord').innerText;
+          return document.querySelector('.red_bord').innerHTML;
         })
         .end()
         .then(async res => {
-           console.log('XXXrsvj row.' + res);
+          //  console.log('XXXrsvj row.' + res);
           return data.push(res);
         })
         .catch((err => {
           console.error('Detail search  detail failed', err);
         }))
     })).then(rows => {
-      console.log('XXX YYY::::----->data .' + rows);
+      // console.log('XXX YYY::::----->data .' + rows);
       return data;
     })
 
 
   })
-  .then(rows => {
-      console.log('AAAAdd row detail page into array.' + rows);
-      return rows;
-    // rowd = await getRows(res)
+  .then(htmls => {
+      // console.log('AAAAdd row detail page into html.' + htmls);
+      // return rows;
+      let drows = [];
+
+      return  Promise.all(htmls.map(async html => {
+          // console.log('AAAAdd onew.... onew page into html.' + html);
+          setTimeout(function() {
+           console.log('Blah blah blah blah extra-blah');
+         }, 100);
+
+        var r = await getRows(html);
+
+        // console.log('AAAAdd row onew page into html.' + r);
+        console.log('AAAAdd row onew page into html.' + JSON.stringify(r));
+
+        // json to csv file 
+        var csv = Papa.unparse(r);
+
+        return drows.push(r);
+
+      })).then(adata => {
+        console.log('all final parsed data' + JSON.stringify(adata));
+        return adata;
+      })
     //
-    // if (rowd ){
-    //   console.log("one row rowd=" + rowd);
-    //   return data;
-    // }
+  })
+  .then(data => {
+    console.log("Final all rows data=" + JSON.stringify(data));
   })
   .catch((error) => {
     console.error('Search failed:', error);
@@ -121,17 +145,13 @@ async function crawlering() {
 
   async function getRows(html) {
       let $ = await cheerio.load(html);
-      let rows = $('tbody > tr').toArray();
-      let res = [];
+      let row = $('tbody > tr').toArray();
 
-      await rows.map(async(row) => {
-          r = await parseRow($, row)
+      r = await parseRow($, row)
               //console.log("=========loopppp row=", JSON.stringify(r));
-          res.push(r);
-      });
 
       // console.log("now in parseHtml function get resturl rowsres=", res);
-      return res;
+      return r;
   }
 
   async function parseRow($, row) {
