@@ -1,8 +1,27 @@
 var Nightmare = require('nightmare');
 var Promise = require("bluebird");
 let cheerio = require("cheerio");
+var proxM = require('./getProxyIps')
 
-const nightmare = Nightmare({ show: true });
+
+
+var proxyIp = await proxM.getProxyIps();
+
+if (!proxyIp.found) {
+    console.log('get da xiang proxy ip error\n');
+    proxyIp.proxyip = undefined;
+} else {
+  console.log('get daxing proxy ip=' + proxyIp.proxyip.toString());
+}
+
+const nightmare = Nightmare({
+  switches: {
+      // 'proxy-server': '10.8.11.240:8100' // set the proxy server here ...
+      //'proxy-server': proxyIp // set the proxy server here ...
+      'proxy-server': await proxyIp.proxyip // set the proxy server here ...
+  },
+  show: true });
+
 
 nightmare
   .goto('http://www.mlcc1.com')
