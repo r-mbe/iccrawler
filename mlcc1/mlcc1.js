@@ -20,9 +20,9 @@ async function getByKeyword(url) {
      switches: {
          // 'proxy-server': '10.8.11.240:8100' // set the proxy server here ...
          //'proxy-server': proxyIp // set the proxy server here ...
-         'proxy-server': await proxyIp.proxyip // set the proxy server here ...
+         'proxy-server': await proxyIp.proxyip.toString() // set the proxy server here ...
      },
-     show: false })
+     show: true })
   }
 
 await nightmare
@@ -42,53 +42,59 @@ await nightmare
   .then( links => { console.log(links); return links })
   .then( links => {
 
-    let data = [];
 
-    return Promise.all(links.map(async link => {
+     let data = [];
+    return  Promise.all(links.map(async link => {
       let nightmare2 ;
       var proxyIp = await ProxM.getProxyIps();
       if (!proxyIp.found) {
           console.log('get da xiang proxy ip error\n');
           proxyIp.proxyip = undefined;
 
-          nightmare2 = Nightmare({ show: false });
+          nightmare2 = Nightmare({ show: true });
       } else {
         console.log('get daxing proxy2222 ip=' + proxyIp.proxyip.toString());
         nightmare2 = Nightmare({
          switches: {
              // 'proxy-server': '10.8.11.240:8100' // set the proxy server here ...
              //'proxy-server': proxyIp // set the proxy server here ...
-             'proxy-server': await proxyIp.proxyip // set the proxy server here ...
+             'proxy-server': await proxyIp.proxyip.toString() // set the proxy server here ...
          },
-         show: false })
+         show: true })
       }
 
 
-       await nightmare2
+
+       return await nightmare2
         .goto(link)
         .wait('.red_bord')
         .evaluate(() => {
           return document.querySelector('.red_bord').innerText;
         })
         .end()
-        .then(res => {
-          console.log('detail page' + res);
-
-          // getRows(res)
-          //   .then( result => {
-          //       console.log("one row result=" + result);
-          //       data.push(result);
-          //   })
-          //   .catch(err => {
-          //       console.error('Parse Detail page error', err);
-          //   })
+        .then(async res => {
+           console.log('XXXrsvj row.' + res);
+          return data.push(res);
         })
         .catch((err => {
           console.error('Detail search  detail failed', err);
         }))
-    }))
+    })).then(rows => {
+      console.log('XXX YYY::::----->data .' + rows);
+      return data;
+    })
 
-    return data;
+
+  })
+  .then(rows => {
+      console.log('AAAAdd row detail page into array.' + rows);
+      return rows;
+    // rowd = await getRows(res)
+    //
+    // if (rowd ){
+    //   console.log("one row rowd=" + rowd);
+    //   return data;
+    // }
   })
   .catch((error) => {
     console.error('Search failed:', error);
