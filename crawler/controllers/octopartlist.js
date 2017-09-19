@@ -105,7 +105,7 @@ async function getByKeyword(keyword) {
         webPreferences: {
             images: false
         },
-        waitTimeout: 80000,
+        // waitTimeout: 80000,
         show: false
     });
 

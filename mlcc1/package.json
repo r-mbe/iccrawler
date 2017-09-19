@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "bluebird": "^3.5.0",
+    "nightmare": "^2.10.0"
+  }
+}
