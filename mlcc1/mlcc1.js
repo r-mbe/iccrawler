@@ -46,6 +46,7 @@ await nightmare
 
     return Promise.all(links.map(async link => {
       let nightmare2 ;
+      var proxyIp = await ProxM.getProxyIps();
       if (!proxyIp.found) {
           console.log('get da xiang proxy ip error\n');
           proxyIp.proxyip = undefined;
@@ -83,7 +84,7 @@ await nightmare
           //   })
         })
         .catch((err => {
-          console.error('Detail search failed', err);
+          console.error('Detail search  detail failed', err);
         }))
     }))
 
