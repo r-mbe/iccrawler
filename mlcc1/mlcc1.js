@@ -1,30 +1,32 @@
 var Nightmare = require('nightmare');
 var Promise = require("bluebird");
-let cheerio = require("cheerio");
-var proxM = require('./getProxyIps')
+var cheerio = require("cheerio");
+var ProxM = require ('./getproxy.js')
 
 
-
-var proxyIp = await proxM.getProxyIps();
-
-if (!proxyIp.found) {
-    console.log('get da xiang proxy ip error\n');
-    proxyIp.proxyip = undefined;
-} else {
-  console.log('get daxing proxy ip=' + proxyIp.proxyip.toString());
-}
-
-const nightmare = Nightmare({
-  switches: {
-      // 'proxy-server': '10.8.11.240:8100' // set the proxy server here ...
-      //'proxy-server': proxyIp // set the proxy server here ...
-      'proxy-server': await proxyIp.proxyip // set the proxy server here ...
-  },
-  show: true });
+async function getByKeyword(url) {
 
 
-nightmare
-  .goto('http://www.mlcc1.com')
+  let nightmare = undefined;
+  var proxyIp = await ProxM.getProxyIps();
+  if (!proxyIp.found) {
+      console.log('get da xiang proxy ip error\n');
+      proxyIp.proxyip = undefined;
+
+      nightmare = Nightmare({ show: true })
+  } else {
+    console.log('get daxing proxy ip=' + proxyIp.proxyip.toString());
+    nightmare = Nightmare({
+     switches: {
+         // 'proxy-server': '10.8.11.240:8100' // set the proxy server here ...
+         //'proxy-server': proxyIp // set the proxy server here ...
+         'proxy-server': await proxyIp.proxyip // set the proxy server here ...
+     },
+     show: false })
+  }
+
+await nightmare
+  .goto(url)
   .click('#login_c')
   .type('#login_user_name', '13632927231')
   .type('#login_email_password', '@123456')
@@ -43,7 +45,23 @@ nightmare
     let data = [];
 
     return Promise.all(links.map(async link => {
-       const nightmare2 = Nightmare({ show: true });
+      let nightmare2 ;
+      if (!proxyIp.found) {
+          console.log('get da xiang proxy ip error\n');
+          proxyIp.proxyip = undefined;
+
+          nightmare2 = Nightmare({ show: false });
+      } else {
+        console.log('get daxing proxy2222 ip=' + proxyIp.proxyip.toString());
+        nightmare2 = Nightmare({
+         switches: {
+             // 'proxy-server': '10.8.11.240:8100' // set the proxy server here ...
+             //'proxy-server': proxyIp // set the proxy server here ...
+             'proxy-server': await proxyIp.proxyip // set the proxy server here ...
+         },
+         show: false })
+      }
+
 
        await nightmare2
         .goto(link)
@@ -75,7 +93,22 @@ nightmare
     console.error('Search failed:', error);
   });
 
+}
 
+
+async function crawlering() {
+  let url = 'http://www.mlcc1.com';
+
+  return await getByKeyword(url);
+}
+
+ crawlering()
+ .then(fres => {
+   console.log('final response=' + fres);
+ })
+ .catch(err => {
+   console.error('final cralering error:',err)
+ })
 
 //parse one row
 
