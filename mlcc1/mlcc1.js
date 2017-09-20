@@ -123,10 +123,20 @@ await nightmare
 
         var csv = Papa.unparse(drows, {header: false});
 
-        fs.appendFile(CsvOutFile, csv + '\n', function(err) {
+        fs.appendFile(CsvOutFile, csv, function(err) {
           if (err) throw err;
           console.log('file append. saved');
+
+           fs.appendFile(CsvOutFile, '\n', function(err) {
+            if (err) throw err;
+            console.log('file append. saved');
+          });
+
         });
+
+
+
+
         // var csv = Papa.unparse(drows, "data.csv");
         if (drows.length > 0 ) {
           fresult = true;
@@ -230,7 +240,7 @@ async function crawlering() {
               .then(ok => {
                 if ( !ok ) {
                   console.log('page crawler error.')
-                  fs.appendFile('crawling.log', url + '\n', function(err) {
+                  fs.appendFile('crawling.log', url + '\r', function(err) {
                     if (err) throw err;
                     console.log('file saved');
                   });
@@ -240,7 +250,7 @@ async function crawlering() {
         // });
       } catch (e) {
         console.log('page crawler error.')
-        fs.appendFile('crawling.log', url + '\n' function(err) {
+        fs.appendFile('crawling.log', url + '\r', function(err) {
           if (err) throw err;
           console.log('file saved');
         });
