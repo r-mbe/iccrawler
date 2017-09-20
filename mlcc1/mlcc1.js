@@ -115,7 +115,7 @@ await nightmare
 
         // console.log('AAAAdd row onew page into html.' + r);
         console.log('AAAAdd row onew page into html.' + JSON.stringify(r));
-         drows.push(r);
+         return drows.push(r);
 
       })).then(rows => {
         console.log('.......all rows final parsed data' + JSON.stringify(rows));
@@ -126,11 +126,6 @@ await nightmare
         fs.appendFile(CsvOutFile, csv, function(err) {
           if (err) throw err;
           console.log('file append. saved');
-
-           fs.appendFile(CsvOutFile, '\n', function(err) {
-            if (err) throw err;
-            console.log('file append. saved');
-          });
 
         });
 
@@ -240,7 +235,7 @@ async function crawlering() {
               .then(ok => {
                 if ( !ok ) {
                   console.log('page crawler error.')
-                  fs.appendFile('crawling.log', url + '\r', function(err) {
+                  fs.appendFile('crawling.log', url + '\n', function(err) {
                     if (err) throw err;
                     console.log('file saved');
                   });
@@ -250,7 +245,7 @@ async function crawlering() {
         // });
       } catch (e) {
         console.log('page crawler error.')
-        fs.appendFile('crawling.log', url + '\r', function(err) {
+        fs.appendFile('crawling.log', url + '\n', function(err) {
           if (err) throw err;
           console.log('file saved');
         });
