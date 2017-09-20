@@ -52,7 +52,7 @@ await nightmare
   .then( links => {
 
      let data = [];
-    return  Promise.all(links.map(async link => {
+    return await  Promise.all(links.map(async link => {
 
       let nightmare2 ;
       var proxyIp = await ProxM.getProxyIps();
@@ -104,7 +104,7 @@ await nightmare
       // return rows;
       let drows = [];
 
-      return  Promise.all(htmls.map(async html => {
+      return await Promise.all(htmls.map(async html => {
           // console.log('AAAAdd onew.... onew page into html.' + html);
           setTimeout(function() {
            console.log('Blah blah blah blah extra-blah');
@@ -122,7 +122,7 @@ await nightmare
 
         var csv = Papa.unparse(drows)
 
-        fs.appendFile(CsvOutFile, csv, function(err) {
+        fs.appendFile(CsvOutFile, csv + '\n', function(err) {
           if (err) throw err;
           console.log('file append. saved');
         });
