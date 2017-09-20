@@ -7,6 +7,7 @@ var fs = require('fs');
 
 var CsvOutFile = "data.csv"
 
+let isShow = false;
 
 async function getByKeyword(url) {
 
@@ -18,7 +19,7 @@ async function getByKeyword(url) {
       console.log('get da xiang proxy ip error\n');
       proxyIp.proxyip = undefined;
 
-      nightmare = Nightmare({ show: true })
+      nightmare = Nightmare({ show: isShow })
   } else {
     console.log('get daxing proxy ip=' + proxyIp.proxyip.toString());
     nightmare = Nightmare({
@@ -27,7 +28,7 @@ async function getByKeyword(url) {
          //'proxy-server': proxyIp // set the proxy server here ...
          'proxy-server': await proxyIp.proxyip.toString() // set the proxy server here ...
      },
-     show: true })
+     show: isShow })
   }
 
 
@@ -52,7 +53,7 @@ await nightmare
   .then( links => {
 
      let data = [];
-    return await  Promise.all(links.map(async link => {
+    return  Promise.all(links.map(async link => {
 
       let nightmare2 ;
       var proxyIp = await ProxM.getProxyIps();
@@ -60,7 +61,7 @@ await nightmare
           console.log('get da xiang proxy ip error\n');
           proxyIp.proxyip = undefined;
 
-          nightmare2 = Nightmare({ show: true });
+          nightmare2 = Nightmare({ show: isShow });
       } else {
         console.log('get daxing proxy2222 ip=' + proxyIp.proxyip.toString());
         nightmare2 = Nightmare({
@@ -69,7 +70,7 @@ await nightmare
              //'proxy-server': proxyIp // set the proxy server here ...
              'proxy-server': await proxyIp.proxyip.toString() // set the proxy server here ...
          },
-         show: true })
+         show: isShow })
       }
 
       setTimeout(function() {
@@ -104,7 +105,7 @@ await nightmare
       // return rows;
       let drows = [];
 
-      return await Promise.all(htmls.map(async html => {
+      return  Promise.all(htmls.map(async html => {
           // console.log('AAAAdd onew.... onew page into html.' + html);
           setTimeout(function() {
            console.log('Blah blah blah blah extra-blah');
@@ -120,7 +121,7 @@ await nightmare
         console.log('.......all rows final parsed data' + JSON.stringify(rows));
         console.log('.......all drows final parsed data' + JSON.stringify(drows));
 
-        var csv = Papa.unparse(drows)
+        var csv = Papa.unparse(drows, {header: false});
 
         fs.appendFile(CsvOutFile, csv + '\n', function(err) {
           if (err) throw err;
@@ -155,7 +156,7 @@ var result = true ;
             console.log('get da xiang proxy ip error\n');
             proxyIp.proxyip = undefined;
 
-            nightmare = Nightmare({ show: true })
+            nightmare = Nightmare({ show: isShow })
         } else {
           console.log('get daxing proxy ip=' + proxyIp.proxyip.toString());
           nightmare = Nightmare({
@@ -164,7 +165,7 @@ var result = true ;
                //'proxy-server': proxyIp // set the proxy server here ...
                'proxy-server': await proxyIp.proxyip.toString() // set the proxy server here ...
            },
-           show: true })
+           show: isShow })
         }
 
         await nightmare
