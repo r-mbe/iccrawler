@@ -230,7 +230,7 @@ async function crawlering() {
               .then(ok => {
                 if ( !ok ) {
                   console.log('page crawler error.')
-                  fs.appendFile('crawling.log', url, function(err) {
+                  fs.appendFile('crawling.log', url + '\n', function(err) {
                     if (err) throw err;
                     console.log('file saved');
                   });
