@@ -129,6 +129,12 @@ await nightmare
 
         });
 
+        fs.appendFile('file.csv', '\r\n', function(err) {
+            if (err) throw err;
+            console.log('file saved');
+        });
+
+
 
 
 
