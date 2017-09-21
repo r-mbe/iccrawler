@@ -129,7 +129,7 @@ await nightmare
 
         });
 
-        fs.appendFile('file.csv', '\r\n', function(err) {
+        fs.appendFile(CsvOutFile, '\r\n', function(err) {
             if (err) throw err;
             console.log('file saved');
         });
